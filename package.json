@@ -1,6 +1,6 @@
 {
   "name": "stuctured-data-editor",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A platform for managing Structured Data",
   "main": "server.js",
   "scripts": {
