@@ -52,7 +52,7 @@ describe('Person API', function() {
     });
   });
   
-  it.skip('should be able to search for a person by name', function(done) {
+  it('should be able to search for a person by name', function(done) {
     request(app)
     .get('/entity/search?name=John+Smith')
     .expect(200)
@@ -63,7 +63,7 @@ describe('Person API', function() {
     });
   });
 
-  it.skip('should be able to search for a person by type', function(done) {
+  it('should be able to search for a person by type', function(done) {
     request(app)
     .get('/entity/search?type=Person')
     .expect(200)

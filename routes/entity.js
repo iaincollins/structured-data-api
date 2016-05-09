@@ -8,11 +8,48 @@ schemas
 .load()
 .then(function(models) {
 
+  var collectionName = 'entities';
+  
   /**
    * Search entities
    */
-  router.post('/search', function(req, res, next) {
+  router.get('/search', function(req, res, next) {
+    
+    var query = {};
 
+    if (req.query.type)
+      query._type = req.query.type;
+
+    if (req.query.name)
+      query.name = req.query.name;
+
+    if (req.query.sameAs)
+      query.sameAs = req.query.sameAs;
+
+    mongoose.connection.db
+    .collection(collectionName)
+    .find(query)
+    .toArray(function(err, results) {
+      if (err) return res.status(500).json({ error: "Unable to search entities." });
+      
+      // For each result, format it using the appropriate Entity model
+      var entities = [];
+      results.forEach(function(entity) {
+        // Skip models that use a schema that isn't defined
+        if (!models[entity._type])
+          return;
+
+        var model = new models[entity._type](entity);
+        
+        if (/application\/ld\+json/.test(req.get('accept'))) {
+          entities.push( serialize.toJSONLD(model.toObject()) );
+        } else {
+          entities.push(model);
+        }
+      });
+      
+      return res.status(200).json(entities);
+    });    
   });
   
   /**
@@ -46,18 +83,18 @@ schemas
       return res.status(400).json({ error: "Entity ID format invalid" });
     
     mongoose.connection.db
-    .collection('entities')
+    .collection(collectionName)
     .findOne({_id: mongoose.Types.ObjectId(req.params.id)}, function(err, entity) {
       if (err) return res.status(500).json({ error: "Unable to fetch entity." });
       
       if (!entity)
         return res.status(404).json({ error: "Entity ID not valid" });
 
-      // Use the appropriate model based on the entity type to load the entity
-      var model = new models[entity._type](entity)
-      if (model === null)
+      if (!models[entity._type])
         return res.status(500).json({ error: "Unable to return entity - entity is of unknown type" });
 
+      // Use the appropriate model based on the entity type to load the entity
+      var model = new models[entity._type](entity);
       if (/application\/ld\+json/.test(req.get('accept'))) {
         return res.json(serialize.toJSONLD(model.toObject()));
       } else {
@@ -78,7 +115,7 @@ schemas
        return res.status(400).json({ error: "Entity ID format invalid" });
   
      mongoose.connection.db
-     .collection('entities')
+     .collection(collectionName)
      .findOne({_id: mongoose.Types.ObjectId(req.params.id)}, function(err, entityInDatabase) {
        if (err) return res.status(500).json("Unable to fetch entity.");
     
@@ -123,7 +160,7 @@ schemas
       return res.status(400).json({ error: "Entity ID format invalid" });
 
     mongoose.connection.db
-    .collection('entities')
+    .collection(collectionName)
     .remove({_id: mongoose.Types.ObjectId(req.params.id)}, function(err, entity) {
       if (err) return res.status(500).json({ error: "Unable to delete entity." });
 
