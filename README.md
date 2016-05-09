@@ -80,7 +80,7 @@ For a list of Triplestores, see:  https://en.wikipedia.org/wiki/List_of_subject-
 
 ## How to use the REST API
 
-For working examples see the `tests` directory.
+For working examples see the `test` directory.
 
 ### Searching
 
