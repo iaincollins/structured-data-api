@@ -1,7 +1,7 @@
 var request = require("supertest-as-promised");
 var app = require('../../server.js');
 
-describe('Person API', function() {
+describe('Person Schema', function() {
   var person = {};
   
   it('should be able to create a person', function(done) {

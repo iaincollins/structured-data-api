@@ -1,7 +1,7 @@
 var request = require("supertest-as-promised");
 var app = require('../../server.js');
 
-describe('Place API', function() {
+describe('Place Schema', function() {
   var place = {};
   
   it('should be able to create a place', function(done) {
@@ -29,7 +29,7 @@ describe('Place API', function() {
     });
   });
 
-  it('should be able to retreive a place', function(done) {
+  it('should be able to retrieve a place', function(done) {
     request(app)
     .get('/entity/'+place.id)
     .expect(200)
@@ -62,7 +62,7 @@ describe('Place API', function() {
     });
   });
 
-  it('should not be able to retreive a place that has been deleted', function(done) {
+  it('should not be able to retrieve a place that has been deleted', function(done) {
     request(app)
     .get('/entity/'+place.id)
     .expect(404)

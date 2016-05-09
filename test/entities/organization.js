@@ -1,7 +1,7 @@
 var request = require("supertest-as-promised");
 var app = require('../../server.js');
 
-describe('Organization API', function() {
+describe('Organization Schema', function() {
   var organization = {};
   
   it('should be able to create an organization', function(done) {
@@ -29,7 +29,7 @@ describe('Organization API', function() {
     });
   });
 
-  it('should be able to retreive an organization', function(done) {
+  it('should be able to retrieve an organization', function(done) {
     request(app)
     .get('/entity/'+organization.id)
     .expect(200)
@@ -62,7 +62,7 @@ describe('Organization API', function() {
     });
   });
 
-  it('should not be able to retreive an organization that has been deleted', function(done) {
+  it('should not be able to retrieve an organization that has been deleted', function(done) {
     request(app)
     .get('/entity/'+organization.id)
     .expect(404)
