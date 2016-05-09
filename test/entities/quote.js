@@ -1,13 +1,13 @@
 var request = require("supertest-as-promised");
 var app = require('../../server.js');
 
-describe('Quote API', function() {
+describe('Quote Schema', function() {
   var quote = {};
   
   it('should be able to create a quote', function(done) {
     request(app)
     .post('/entity')
-    .send({ type: "Quote", name: "Famous speech", quotation: "An example quote"})
+    .send({ type: "Quote", name: "A well known quote", quotation: "You must be the change you wish to see in the world."})
     .expect(201)
     .then(function(res) {
       // Save new quote for other tests below
@@ -18,17 +18,17 @@ describe('Quote API', function() {
       if (quote.type != "Quote")
         return done(Error("A quote should be of type 'Quote'"));
 
-      if (quote.name != "Famous speech")
+      if (quote.name != "A well known quote")
         return done(Error("Should be able to give a quote a name"));
       
-      if (quote.quotation != "An example quote")
-        return done(Error("Should be able to give a quote a description"));
+      if (quote.quotation != "You must be the change you wish to see in the world.")
+        return done(Error("Should be able to add a quotation to a quote"));
 
       done();
     });
   });
 
-  it('should be able to retreive a quote', function(done) {
+  it('should be able to retrieve a quote', function(done) {
     request(app)
     .get('/entity/'+quote.id)
     .expect(200)
@@ -61,7 +61,7 @@ describe('Quote API', function() {
     });
   });
 
-  it('should not be able to retreive a quote that has been deleted', function(done) {
+  it('should not be able to retrieve a quote that has been deleted', function(done) {
     request(app)
     .get('/entity/'+quote.id)
     .expect(404)

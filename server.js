@@ -10,7 +10,7 @@ mongoose.connection.on('error', function(err) {
   console.error("MongoDB error", err);
 });
 
-// Connect to the Mongo DB
+// Connect to the Mongo DB (mLab on Heroku uses MONGOLAB_URI)
 mongoose.connect( process.env.MONGODB || process.env.MONGOLAB_URI || 'mongodb://localhost/structured-data' );
 
 // Configure Express to handle JSON requests
@@ -24,10 +24,15 @@ app.engine('ejs', ejs.__express);
 // Serve static content from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-/** 
- * Configure routes
+/**
+ * @TODO Define homepage
  */
-require('./routes/index')(app);
+app.get('/', function(req, res, next) { res.json() });
+
+/**
+ * Routes for Entities
+ */
+app.use('/entity', require('./routes/entity'));
 
 /**
  * 500 Error Handler
@@ -53,10 +58,11 @@ app.use(function(req, res, next) {
 
 /**
  * Start listening
+ * @FIXME Don't start listening until mongo is up
  */
 app.set('port', process.env.PORT || 3000);
 app.listen(app.get('port'), function() {
-  console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
+  console.log('Server listening on port %d in %s mode', app.get('port'), app.get('env'));
 });
 
 module.exports = app;

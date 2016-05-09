@@ -1,9 +1,9 @@
 {
-  "name": "structured-data-editor",
-  "description": "A platform for managing Structured Data",
+  "name": "structured-data-api",
+  "description": "A platform for working with Structured Data",
   "website": "http://glitch.digital",
-  "repository": "https://github.com/glitch.digital/structured-data-editor",
-  "keywords": ["stuctured data", "entities"],
+  "repository": "https://github.com/glitch.digital/structured-data-api",
+  "keywords": ["structured data", "entities"],
   "success_url": "/",
   "addons": ["mongolab:sandbox"]
 }

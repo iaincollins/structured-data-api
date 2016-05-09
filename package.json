@@ -1,21 +1,28 @@
 {
-  "name": "stuctured-data-editor",
-  "version": "0.2.2",
-  "description": "A platform for managing Structured Data",
+  "name": "stuctured-data-api",
+  "version": "0.3.1",
+  "description": "A platform for working with Structured Data",
   "main": "server.js",
   "scripts": {
-    "test": "mocha test/models.js test/routes.js test/entities/*.js"
+    "test": "mocha test/routes.js test/entities/*.js"
   },
   "author": "<iain.collins@glitch.digital>",
   "license": "MIT",
   "dependencies": {
+    "angular-schema-form": "^0.8.13",
     "body-parser": "^1.15.0",
+    "camelcase": "^2.1.1",
     "ejs": "^2.4.1",
     "express": "^4.13.4",
+    "glob": "^7.0.3",
     "install": "^0.5.6",
+    "json-schema-to-mongoose": "^0.2.2",
     "mongoose": "^4.4.7",
+    "mongoose-jsonschema-validation": "0.0.3",
     "mongoose-schema-extend": "0.2.0",
-    "npm": "^3.8.1"
+    "npm": "^3.8.1",
+    "pascalcase": "^0.1.1",
+    "pluralize": "^1.2.1"
   },
   "devDependencies": {
     "supertest": "^1.2.0",

@@ -1,18 +1,18 @@
 var request = require("supertest-as-promised");
 var app = require('../../server.js');
 
-describe('Event API', function() {
+describe('Event Schema', function() {
   var event = {};
   
   it('should be able to create an event', function(done) {
     request(app)
     .post('/entity')
-    .send({ type: "Event", name: "The Big Bang", description: "An example event"})
+    .send({ type: "Event", name: "The Big Bang", description: "In the beginning" })
     .expect(201)
     .then(function(res) {
       // Save new event for other tests below
       event = res.body;
-
+      
       if (!event.id)
         return done(Error("An event should have an ID"));
 
@@ -22,14 +22,14 @@ describe('Event API', function() {
       if (event.name != "The Big Bang")
         return done(Error("Should be able to give an event a name"));
       
-      if (event.description != "An example event")
+      if (event.description != "In the beginning")
         return done(Error("Should be able to give an event a description"));
 
       done();
     });
   });
 
-  it('should be able to retreive an event', function(done) {
+  it('should be able to retrieve an event', function(done) {
     request(app)
     .get('/entity/'+event.id)
     .expect(200)
@@ -62,7 +62,7 @@ describe('Event API', function() {
     });
   });
 
-  it('should not be able to retreive an event that has been deleted', function(done) {
+  it('should not be able to retrieve an event that has been deleted', function(done) {
     request(app)
     .get('/entity/'+event.id)
     .expect(404)

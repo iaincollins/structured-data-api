@@ -1,7 +1,7 @@
 var request = require("supertest-as-promised");
 var app = require('../../server.js');
 
-describe('Person API', function() {
+describe('Person Schema', function() {
   var person = {};
   
   it('should be able to create a person', function(done) {
@@ -41,7 +41,7 @@ describe('Person API', function() {
     });
   });
 
-  it('should be able to retreive a person', function(done) {
+  it('should be able to retrieve a person', function(done) {
     request(app)
     .get('/entity/'+person.id)
     .expect(200)
@@ -63,7 +63,6 @@ describe('Person API', function() {
     });
   });
 
-
   it('should be able to search for a person by type', function(done) {
     request(app)
     .get('/entity/search?type=Person')
@@ -74,7 +73,7 @@ describe('Person API', function() {
       done();
     });
   });
-
+  
   it('should be able to update a person', function(done) {
     person.name = "Jane Smith";
     person.email = "jane.smith@example.com";
@@ -135,7 +134,7 @@ describe('Person API', function() {
     });
   });
 
-  it('should not be able to retreive a person that has been deleted', function(done) {
+  it('should not be able to retrieve a person that has been deleted', function(done) {
     request(app)
     .get('/entity/'+person.id)
     .expect(404)
