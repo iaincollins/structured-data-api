@@ -2,7 +2,7 @@
  * A base schema for properties common to all entities
  */
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema
+    Schema = mongoose.Schema,
     serialize = require('../lib/serialize');
 
 module.exports = new function() {

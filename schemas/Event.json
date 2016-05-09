@@ -1,0 +1,10 @@
+{
+  "title": "Example Schema",
+  "type": "object",
+  "properties": {
+    "eventName": {
+      "type": "string"
+    }
+  },
+  "required": ["eventName"]
+}

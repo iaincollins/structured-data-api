@@ -1,6 +1,6 @@
 describe('Routes', function() {
-  it("should be able to instantiate all routes", function() {
-    var Routes = require('../routes/index');
+  it("should be able to instantiate all route handlers", function() {
+    var entity = require('../routes/entity');
     return true;
   });
 });
