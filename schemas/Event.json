@@ -1,10 +1,13 @@
 {
-  "title": "Example Schema",
+  "title": "Event Schema",
   "type": "object",
   "properties": {
-    "eventName": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
       "type": "string"
     }
   },
-  "required": ["eventName"]
+  "required": ["name"]
 }

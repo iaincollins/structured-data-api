@@ -4,7 +4,7 @@
   "description": "A platform for managing Structured Data",
   "main": "server.js",
   "scripts": {
-    "test": "mocha test/models.js test/routes.js test/entities/*.js"
+    "test": "mocha test/routes.js test/entities/*.js"
   },
   "author": "<iain.collins@glitch.digital>",
   "license": "MIT",
