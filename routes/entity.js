@@ -41,12 +41,7 @@ schemas
         var model = new models[entity._type](entity);
         
         if (/application\/ld\+json/.test(req.get('accept'))) {
-          //entities.push( serialize.toJSONLD(model.toJSONLD()) );
           entities.push(model.toJSONLD());
-          this.schema.pre('remove', function(next) {
-            // Insert hook to remove entires from other platforms (e.g. Triplestore)…
-            next();
-          });
         } else {
           entities.push(model);
         }
@@ -100,7 +95,6 @@ schemas
       // Use the appropriate model based on the entity type to load the entity
       var model = new models[entity._type](entity);
       if (/application\/ld\+json/.test(req.get('accept'))) {
-        //return res.json(serialize.toJSONLD(model.toObject()));
         return res.json(model.toJSONLD());
       } else {
         return res.json(model);
