@@ -7,7 +7,20 @@
     },
     "description": {
       "type": "string"
+    },
+    "address": {
+      "$ref": "#/definitions/PostalAddress"
     }
   },
-  "required": ["name"]
+  "required": ["name"],
+  "definitions": {
+    "PostalAddress": {
+      "type": "object",
+      "properties": {
+        "streetAddress": { "type": "string" },
+        "addressRegion": { "type": "string" },
+        "postalCode":    { "type": "string" }
+      }
+    }
+  }
 }
