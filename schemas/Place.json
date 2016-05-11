@@ -43,8 +43,11 @@
       "properties": {
         "streetAddress": { "type": "string" },
         "addressRegion": { "type": "string" },
+        "addressLocality": { "type": "string" },
+        "addressCountry": { "type": "string" },
         "postalCode":    { "type": "string" }
-      }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

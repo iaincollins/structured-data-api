@@ -26,20 +26,32 @@
       "format": "date-time"
     },
     "birthPlace": {
-      "$ref": "Place.json#/definitions/PostalAddress"
+      "oneOf": [
+        { "type": "string", "format": "$ref:Place" },
+        { "$ref": "Place.json" }
+      ]
     },
     "deathDate": {
       "type": "string",
       "format": "date-time"
     },
     "deathPlace": {
-      "$ref": "Place.json#/definitions/PostalAddress"
+      "oneOf": [
+        { "type": "string", "format": "$ref:Place" },
+        { "$ref": "Place.json" }
+      ]
     },
     "affiliation": {
-      "$ref": "Organization.json"
+      "oneOf": [
+        { "type": "string", "format": "$ref:Organization" },
+        { "$ref": "Organization.json" }
+      ]
     },
     "address": {
-      "$ref": "Place.json#/definitions/PostalAddress"
+      "oneOf": [
+        { "type": "string" },
+        { "$ref": "Place.json#/definitions/PostalAddress" }
+      ]
     }
   },
   "required": ["name"],

@@ -12,7 +12,8 @@ describe('Person Schema', function() {
       name: "John Smith",
       description: "An example person",
       email: "john.smith@example.com",
-      birthDate: "2000-01-01"
+      birthDate: "2000-01-01",
+      birthPlace: { name: "Example Address", address: { streetAddress: "123 Fake Street", addressLocality: "London" } }
     })
     .expect(201)
     .then(function(res) {
@@ -77,6 +78,7 @@ describe('Person Schema', function() {
   it('should be able to update a person', function(done) {
     person.name = "Jane Smith";
     person.email = "jane.smith@example.com";
+    person.birthPlace = "http://example.com/place/dc90153cea1e7b621bc48e36968bcd5c";
     request(app)
     .put('/entity/'+person.id)
     .send(person)

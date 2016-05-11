@@ -22,7 +22,10 @@
       "format": "date-time"
     },
     "address": {
-      "$ref": "Place.json#/definitions/PostalAddress"
+      "oneOf": [
+        { "type": "string" },
+        { "$ref": "Place.json#/definitions/PostalAddress" }
+      ]
     },
     "leiCode": {
       "type": "string"

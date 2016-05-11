@@ -27,6 +27,7 @@
     },
     "location": {
       "oneOf": [
+        { "type": "string", "format": "$ref:Place" },
         { "$ref": "Place.json" },
         { "$ref": "Place.json#/definitions/PostalAddress" }
       ]
