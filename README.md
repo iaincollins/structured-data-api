@@ -41,22 +41,26 @@ If you want to run the tests you will need `mocha` installed:
 
 You can check everything is working with `npm test`.
 
-#### Options
+#### Configuration options
 
-If you don't have a MongoDB database running locally you can specify a remote server by passing a connection string as an environment variable before calling `npm start` or `npm test`.
+##### Database 
+
+If you don't have a MongoDB database running locally or just want to specify a remote server you can passing a connection string as an environment variable before calling `npm start` or `npm test`.
 
     MONGODB=mongodb://username:password@server.example.com:27017/db-name npm start
-    
-You can specify a schema dir other that `./schemas` usign the SCHEMAS environment variable.
 
-   SCHEMAS=/usr/local/schemas/ npm start
-   
 By default all objects are stored in a MongoDB Collection named `entities`. You can specify a different Collection name using the COLLECTION environment variable.
    
-   COLLECTION="things" npm start
+    COLLECTION="things" npm start
    
-Note: Currently there is no option to change either the REST API routes or to store different schema objects in different Collections.
-   
+Note: Currently there is no option to change either the REST API routes or to store different schema objects in different Collections. Additional flexibility may appear in a future release.
+
+##### Schemas
+
+You can specify a schema dir other that `./schemas` using the SCHEMAS environment variable.
+
+    SCHEMAS=/usr/local/schemas/ npm start
+      
 #### Deploy to Heroku
 
 If don't have Node.js and MongoDB set up locally and want to deploy it to Heroku you can use the following link deploy a free instance (it will also setup and connect to a free database with mLab for you too).
