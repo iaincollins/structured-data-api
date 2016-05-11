@@ -49,7 +49,7 @@ If you don't have a MongoDB database running locally or just want to specify a r
 
     MONGODB=mongodb://username:password@server.example.com:27017/db-name npm start
 
-By default all objects are stored in a MongoDB Collection named `entities`. You can specify a different Collection name using the COLLECTION environment variable.
+By default all objects are stored in a MongoDB Collection named "*entities*". You can specify a different Collection name using the COLLECTION environment variable.
    
     COLLECTION="things" npm start
    
@@ -135,16 +135,15 @@ HTTP DELETE to /entity/:id
 
     curl -X DELETE http://localhost:3000/entity/9cb1a2bf7f5e321cf8ef0d15
 
-## Todo / known issues
+## Roadmap
 
 The following features are on the immediate roadmap:
 
-* Provide a system for authentication to limit Creating, Updating and Deleting.
-* A web based interface with to manage entities and users, and documentation.
-* Add more powerful searching (free text, based on properties, etc).
-* Improve example json-schema files.
-* Improve JSON-LD support.
-
+* Provide a login and auth system to limit Creating, Updating and Deleting entires to authorized users.
+* A web based interface with to manage entities, users, and documentation.
+* Add more powerful searching (eg free text, based on properties other than name, type and ID, etc).
+* Add option to configure collections and API paths.
+* Add JSON-LD support (in development).
 
 ## Contributing
 
