@@ -12,13 +12,13 @@ describe('Person Schema', function() {
       name: "John Smith",
       description: "An example person",
       email: "john.smith@example.com",
-      invalidPropertyName: "abcdef"
+      birthDate: "2000-01-01"
     })
     .expect(201)
     .then(function(res) {
       // Save new person for other tests below
       person = res.body;
-
+      
       if (!person.id)
         return done(Error("A person should have an ID"));
 
@@ -27,15 +27,15 @@ describe('Person Schema', function() {
 
       if (person.name != "John Smith")
         return done(Error("Should be able to give a person a name"));
-      
+
       if (person.description != "An example person")
         return done(Error("Should be able to give a person a description"));
 
       if (person.email != "john.smith@example.com")
         return done(Error("Should be able to give a person an email address"));
 
-      if (person.invalidPropertyName)
-        return done(Error("Should not be able to set an invalid property on a person"));
+      if (person.birthDate != "2000-01-01T00:00:00.000Z")
+        return done(Error("Should be able to assign a birth date/time to a person"));
 
       done();
     });

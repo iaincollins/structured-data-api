@@ -66,7 +66,10 @@ schemas
     var model = new models[entityType](req.body)
     model._type = entityType;
     model.save(function(err, entity) {
-      if (err) return res.status(500).json({ error: "Unable to create entity." });
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Unable to create entity." });
+      }
       return res.status(201).json(entity);
     });
   });
@@ -140,8 +143,11 @@ schemas
        //options:        
        var model = new models[entityInDatabase._type](entity);
        model
-       .update(entity, { overwrite: true, runValidators: false }, function(err) {
-         if (err) return res.status(500).json({ error: "Unable to save changes to entity." });
+       .update(entity, { overwrite: true, runValidators: true }, function(err) {
+         if (err) {
+           console.error(err);
+           return res.status(500).json({ error: "Unable to save changes to entity." });
+         }
          return res.json(entity);
       });
     });

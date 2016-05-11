@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "title": "Event Schema",
+  "title": "Quotation Schema",
   "type": "object",
   "properties": {
     "name": {
@@ -17,19 +17,21 @@
       "type": "string",
       "format": "uri"
     },
-    "startDate": {
+    "description": {
+      "type": "string"
+    },
+    "datePublished": {
       "type": "string",
       "format": "date-time"
     },
-    "endDate": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "location": {
+    "spokenByCharacter": {
       "oneOf": [
-        { "$ref": "Place.json" },
-        { "$ref": "Place.json#/definitions/PostalAddress" }
+        { "$ref": "Person.json" },
+        { "$ref": "Organization.json" }
       ]
+    },
+    "text": {
+      "type": "string"
     }
   },
   "required": ["name"],

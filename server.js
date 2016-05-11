@@ -10,6 +10,8 @@ mongoose.connection.on('error', function(err) {
   console.error("MongoDB error", err);
 });
 
+process.env.SCHEMAS = __dirname+"/schemas/";
+
 // Connect to the Mongo DB (mLab on Heroku uses MONGOLAB_URI)
 mongoose.connect( process.env.MONGODB || process.env.MONGOLAB_URI || 'mongodb://localhost/structured-data' );
 
