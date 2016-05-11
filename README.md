@@ -31,7 +31,7 @@ Once downloaded, install and run with:
     npm install
     npm start
 
-To login to the UI go to `http://localhost:3000` in your browser. The default username and password are both set to 'admin'. You'll be able to change the password and add new accounts once you've logged in.
+The server willl then be running at `http://localhost:3000`. Please note there is no web based user inteface yet, just a RESTful API!
 
 #### Testing
 
