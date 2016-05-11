@@ -7,7 +7,7 @@ schemas
 .load()
 .then(function(models) {
 
-  var collectionName = 'entities';
+  var collectionName = schemas.collectionName;
   
   /**
    * Search entities
