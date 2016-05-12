@@ -14,15 +14,15 @@ The focus of this platform is utility and ease of use. It aims to be informed by
 
 It currently includes example schemas for:
 
-* People
-* Places
-* Organizations
-* Events
-* Quotes
+* [People](schemas/Person.json)
+* [Places](schemas/Place.json)
+* [Organizations](schemas/Organization.json)
+* [Events](schemas/Event.json)
+* [Quotations](schemas/Quotation.json)
 
 These are currently simple implementations based on properties defined at schema.org.
 
-Note: This is not a Linked Data Platform and does not aim for compliance with LDP but rather provides a practical way to easily manage entities (and, for example, could also be used to populate and manage data in a Triplestore). JSON-schema is used to define objects and for validation. Support for exporting objects in JSON-LD is still in development.
+Note: This is not a Linked Data Platform and does not aim for compliance with LDP but rather provides a practical way to easily manage entities (and could also be used to populate and manage content in a Triplestore). JSON-schema is used to define objects and for validation. Support for exporting objects in JSON-LD is still in development, so you'd need to add hooks to transform the objects yourself if you wanted to do that.
 
 ### Getting started
 
@@ -92,7 +92,7 @@ Note: Something that converts *JSON-LD* files to *JSON-schema* files would be he
 
 Properties can be defined as referring to ObjectId's. This is not part of the JSON-schema standard, but extends it.
 
-"myProperty": { "type": "string", "format": "objectid" }
+    "myProperty": { "type": "string", "format": "objectid" }
 
 Properties defined like this will treated like actual ObjectIDs internally (and not just stored as strings).
 
@@ -100,23 +100,23 @@ The exception is that that if used with "mixed type" property (i.e. in conjuncti
 
 For example, in this case either an object matching the "Person" schema or a string that is formated as an ObjectID is valid but in the case of an ObjectID it will be stored as string internally.
 
-"myProperty": {
-  "oneOf": [ 
-     {  "type": "string", "format": "objectid" },
-     {  $ref: "Person.json }
-  ]
-}
+    "myProperty": {
+      "oneOf": [ 
+         {  "type": "string", "format": "objectid" },
+         {  $ref: "Person.json }
+      ]
+    }
 
 If you want to reference external entities, you might want to also consider using URIs:
 
-"myProperty": {
-  "oneOf": [ 
-     {  "type": "string", "format": "uri" },
-     {  $ref: "Person.json }
-  ]
-}
+    "myProperty": {
+      "oneOf": [ 
+         {  "type": "string", "format": "uri" },
+         {  $ref: "Person.json }
+      ]
+    }
 
-## SPARQL and Triplestore support
+#### SPARQL and Triplestore support
 
 If you have a dedicated Triplestore you could look for the *save* and *remove* hooks in `./lib/schemas.js` to push updates to another data source on every create/update/delete request. Alternatively, some Triplestores like AllegroGraph provide a way to sync them with MongoDB.
 
@@ -171,7 +171,7 @@ The following features are on the immediate roadmap:
 
 * Provide a login and auth system to limit Creating, Updating and Deleting entires to authorized users.
 * A web based interface with to manage entities, users, and documentation.
-* Add more powerful searching (eg free text, based on properties other than name, type and ID, etc).
+* Add more powerful searching (e.g. free text, based on properties other than name, type and ID, etc).
 * Add option to configure collections and API paths.
 * Add JSON-LD support (in development).
 
