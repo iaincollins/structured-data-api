@@ -26,8 +26,6 @@
     },
     "spokenByCharacter": {
       "oneOf": [
-        { "type": "string", "format": "$ref:Person" },
-        { "type": "string", "format": "$ref:Organization" },
         { "$ref": "Person.json" },
         { "$ref": "Organization.json" }
       ]

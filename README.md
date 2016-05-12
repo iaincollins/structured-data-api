@@ -2,7 +2,7 @@
 
 This is a simple platform to easily create Search, Create, Retrieve, Update and Delete (SCRUD) methods for managing Structured Data entities.
 
-It comes with schemas for People, Places, Organizations, Events and Quotes and is easy to extend just by editing *json-schema* files in the `./schemas/` directory.
+It comes with schemas for People, Places, Organizations, Events and Quotes and is easy to extend just by editing *JSON-schema* files in the `./schemas/` directory.
 
 ## About this platform
 
@@ -12,7 +12,7 @@ If you don't need features like SPARQL support all you need is Node.js and Mongo
 
 The focus of this platform is utility and ease of use. It aims to be informed by and compliant with existing relevant standards.
 
-It currently includes very simple schemas for:
+It currently includes example schemas for:
 
 * People
 * Places
@@ -20,7 +20,9 @@ It currently includes very simple schemas for:
 * Events
 * Quotes
 
-These are currently very simple implementations which are easy to expand on, all you need to do is update the corresponding *json-schema* in the `./schemas/` directory and restart the app.
+These are currently simple implementations based on properties defined at schema.org.
+
+Note: This is not a Linked Data Platform and does not aim for compliance with LDP but rather provides a practical way to easily manage entities (and, for example, could also be used to populate and manage data in a Triplestore). JSON-schema is used to define objects and for validation. Support for exporting objects in JSON-LD is still in development.
 
 ### Getting started
 
@@ -69,8 +71,8 @@ If don't have Node.js and MongoDB set up locally and want to deploy it to Heroku
 
 ### Modifying schemas
 
-The files in `./schemas/` must be in the **json-schema** format:
-http://json-schema.org
+The files in `./schemas/` must be in the **JSON-schema** format:
+http://JSON-schema.org
 
 For interoperability with other linked data you might want to follow the schemas at **schema.org**:
 https://schema.org
@@ -78,13 +80,41 @@ https://schema.org
 **Note:**
 
 * Schemas on schema.org are available in *JSON-LD* format.
-* This is not the same as the *json-schema* format.
+* This is not the same as the *JSON-schema* format.
 
-That there are two different schema formats in JSON can be confusing. The reason is that *JSON-LD* used to described Linked Data objects between computer systems, while *json-schema* is intended to used by people to describe the schema to the computer and things like what error message to display during validation if there is an error.
+That there are two different schema formats in JSON can be confusing. While designed with different use cases in mind, they are similar in many ways but each has unique features.
 
-As part of this project we will probably end up writing something to that converts *JSON-LD* files to *json-schema* files so it's easier to get started, but that functionality doesn't exist right now.
+For example: *JSON-LD* is used to described Linked Data objects between computer systems (e.g. web sites and search engines) while *JSON-schema* is intended to used by people to describe the schema to the computer and things like validation for properties what error message to display if something is incorrectly formatted.
 
-This is not a Linked Data Platform and does not aim for compliance with LDP but rather provides a practical way to easily manage entities (and could also be used to populate and manage data in a Triplestore).
+Note: Something that converts *JSON-LD* files to *JSON-schema* files would be helpful here, as it would make it easy to import JSON-LD schemas from sites like schema.org in bulk.
+
+#### Referencing other entities in a schema
+
+Properties can be defined as referring to ObjectId's. This is not part of the JSON-schema standard, but extends it.
+
+"myProperty": { "type": "string", "format": "objectid" }
+
+Properties defined like this will treated like actual ObjectIDs internally (and not just stored as strings).
+
+The exception is that that if used with "mixed type" property (i.e. in conjunction with "oneOf" or "anyOf" in a schema) it will still be validated correctly however will be (incorrectly) stored in the database as a string and not an ObjectID.
+
+For example, in this case either an object matching the "Person" schema or a string that is formated as an ObjectID is valid but in the case of an ObjectID it will be stored as string internally.
+
+"myProperty": {
+  "oneOf": [ 
+     {  "type": "string", "format": "objectid" },
+     {  $ref: "Person.json }
+  ]
+}
+
+If you want to reference external entities, you might want to also consider using URIs:
+
+"myProperty": {
+  "oneOf": [ 
+     {  "type": "string", "format": "uri" },
+     {  $ref: "Person.json }
+  ]
+}
 
 ## SPARQL and Triplestore support
 

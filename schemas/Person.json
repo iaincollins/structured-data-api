@@ -26,26 +26,17 @@
       "format": "date-time"
     },
     "birthPlace": {
-      "oneOf": [
-        { "type": "string", "format": "$ref:Place" },
-        { "$ref": "Place.json" }
-      ]
+      "$ref": "Place.json"
     },
     "deathDate": {
       "type": "string",
       "format": "date-time"
     },
     "deathPlace": {
-      "oneOf": [
-        { "type": "string", "format": "$ref:Place" },
-        { "$ref": "Place.json" }
-      ]
+      "$ref": "Place.json"
     },
     "affiliation": {
-      "oneOf": [
-        { "type": "string", "format": "$ref:Organization" },
-        { "$ref": "Organization.json" }
-      ]
+      "$ref": "Organization.json"
     },
     "address": {
       "oneOf": [

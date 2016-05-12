@@ -64,6 +64,57 @@ describe('Quotation Schema', function() {
       .then(function(res) {
         if (res.body.text != "Taste the rainbow")
           return done(Error("Should be able to modify a quotation and the change should be saved"));
+        
+        if (res.body.spokenByCharacter.leiCode != "549300MGWYJ9LR7XYV24")
+          return done(Error("Should be able to modify a quotation to reference an Organization"));
+        done();
+      });
+    });
+  });
+  
+  
+  /**
+   * Skipped as not implemented in the reference schema.
+   */
+  it.skip('should be able to use an ObjectID to refer to a Person or Organization', function(done) {
+    quote.spokenByCharacter = "57348428372a5abaaf3e1f2b";
+    request(app)
+    .put('/entity/'+quote.id)
+    .send(quote)
+    .expect(200)
+    .then(function(res) {
+      request(app)
+      .get('/entity/'+quote.id)
+      .expect(200)
+      .then(function(res) {
+        if (res.body.spokenByCharacter != "57348428372a5abaaf3e1f2b")
+          return done(Error("Should be able to modify a quotation to use a reference of an ObjectID of a Person or Organization"));
+        
+        done();
+      });
+    });
+  });
+  
+  /**
+   * This is skipped as it is not implemented in the reference schema.
+   */
+  it.skip('should not store an ObjectID for a Person or Organization as a string', function(done) {
+    quote.spokenByCharacter = "abc123";
+    request(app)
+    .put('/entity/'+quote.id)
+    .send(quote)
+    .then(function(res) {
+      
+      if (res.statusCode == "200")
+        return done(Error("Should not allow an invalid ObjectID as a reference for a Person or Organization"));
+
+      request(app)
+      .get('/entity/'+quote.id)
+      .expect(200)
+      .then(function(res) {
+        if (res.body.spokenByCharacter == "abc123")
+          return done(Error("An ObjectID of a Person or Organization but should not be treated like a string"));
+        
         done();
       });
     });

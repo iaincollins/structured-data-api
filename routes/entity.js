@@ -38,7 +38,7 @@ schemas
         if (!models[entity._type])
           return;
 
-        var model = new models[entity._type](entity);
+        var model = new models[entity._type].model(entity);
         
         if (/application\/ld\+json/.test(req.get('accept'))) {
           entities.push(model.toJSONLD());
@@ -63,13 +63,11 @@ schemas
     if (!models[entityType])
       return res.status(400).json({ error: "Invalid entity type specified." });
     
-    var model = new models[entityType](req.body)
+    var model = new models[entityType].model(req.body)
     model._type = entityType;
     model.save(function(err, entity) {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Unable to create entity." });
-      }
+      if (err)
+        return res.status(500).json({ error: "Unable to create entity.", message: err.message || null });
       return res.status(201).json(entity);
     });
   });
@@ -96,7 +94,7 @@ schemas
         return res.status(500).json({ error: "Unable to return entity - entity is of unknown type" });
 
       // Use the appropriate model based on the entity type to load the entity
-      var model = new models[entity._type](entity);
+      var model = new models[entity._type].model(entity);
       if (/application\/ld\+json/.test(req.get('accept'))) {
         return res.json(model.toJSONLD());
       } else {
@@ -141,13 +139,11 @@ schemas
        // @FIXME: runValidators: true DOES NOT WORK. so values like 'required'
        // are ignored (and fields that should be required can be removed).
        //options:        
-       var model = new models[entityInDatabase._type](entity);
+       var model = new models[entityInDatabase._type].model(entity);
        model
        .update(entity, { overwrite: true, runValidators: true }, function(err) {
-         if (err) {
-           console.error(err);
-           return res.status(500).json({ error: "Unable to save changes to entity." });
-         }
+         if (err)
+           return res.status(500).json({ error: "Unable to save changes to entity.", message: err.message || null });
          return res.json(entity);
       });
     });

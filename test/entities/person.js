@@ -78,7 +78,6 @@ describe('Person Schema', function() {
   it('should be able to update a person', function(done) {
     person.name = "Jane Smith";
     person.email = "jane.smith@example.com";
-    person.birthPlace = "http://example.com/place/dc90153cea1e7b621bc48e36968bcd5c";
     request(app)
     .put('/entity/'+person.id)
     .send(person)
@@ -96,7 +95,7 @@ describe('Person Schema', function() {
           return done(Error("Should be able to rename a person and the change should be saved"));
     
         if (res.body.email != "jane.smith@example.com")
-          return done(Error("Should be able to update the email address for a person and the change shold be saved"));
+          return done(Error("Should be able to update the email address for a person and the change should be saved"));
         done();
       });
     });
