@@ -6,7 +6,7 @@ describe('Quotation Schema', function() {
   
   it('should be able to create a quotation', function(done) {
     request(app)
-    .post('/entity')
+    .post('/api')
     .send({ 
       type: "Quotation",
       name: "A well known quote",
@@ -38,7 +38,7 @@ describe('Quotation Schema', function() {
 
   it('should be able to retrieve a quotation', function(done) {
     request(app)
-    .get('/entity/'+quote.id)
+    .get('/api/'+quote.id)
     .expect(200)
     .then(function(res) {
       if (!res.body.id)
@@ -54,12 +54,12 @@ describe('Quotation Schema', function() {
       leiCode: "549300MGWYJ9LR7XYV24"
     };
     request(app)
-    .put('/entity/'+quote.id)
+    .put('/api/'+quote.id)
     .send(quote)
     .expect(200)
     .then(function(res) {
       request(app)
-      .get('/entity/'+quote.id)
+      .get('/api/'+quote.id)
       .expect(200)
       .then(function(res) {
         if (res.body.text != "Taste the rainbow")
@@ -79,12 +79,12 @@ describe('Quotation Schema', function() {
   it.skip('should be able to use an ObjectID to refer to a Person or Organization', function(done) {
     quote.spokenByCharacter = "57348428372a5abaaf3e1f2b";
     request(app)
-    .put('/entity/'+quote.id)
+    .put('/api/'+quote.id)
     .send(quote)
     .expect(200)
     .then(function(res) {
       request(app)
-      .get('/entity/'+quote.id)
+      .get('/api/'+quote.id)
       .expect(200)
       .then(function(res) {
         if (res.body.spokenByCharacter != "57348428372a5abaaf3e1f2b")
@@ -101,7 +101,7 @@ describe('Quotation Schema', function() {
   it.skip('should not store an ObjectID for a Person or Organization as a string', function(done) {
     quote.spokenByCharacter = "abc123";
     request(app)
-    .put('/entity/'+quote.id)
+    .put('/api/'+quote.id)
     .send(quote)
     .then(function(res) {
       
@@ -109,7 +109,7 @@ describe('Quotation Schema', function() {
         return done(Error("Should not allow an invalid ObjectID as a reference for a Person or Organization"));
 
       request(app)
-      .get('/entity/'+quote.id)
+      .get('/api/'+quote.id)
       .expect(200)
       .then(function(res) {
         if (res.body.spokenByCharacter == "abc123")
@@ -122,7 +122,7 @@ describe('Quotation Schema', function() {
   
   it('should be able to delete a quotation', function(done) {
     request(app)
-    .delete('/entity/'+quote.id)
+    .delete('/api/'+quote.id)
     .expect(204)
     .then(function(res) {
       done();
@@ -131,7 +131,7 @@ describe('Quotation Schema', function() {
 
   it('should not be able to retrieve a quotation that has been deleted', function(done) {
     request(app)
-    .get('/entity/'+quote.id)
+    .get('/api/'+quote.id)
     .expect(404)
     .then(function(res) {
       if (res.body.id)

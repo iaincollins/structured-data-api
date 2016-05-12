@@ -6,7 +6,7 @@ describe('Organization Schema', function() {
   
   it('should be able to create an organization', function(done) {
     request(app)
-    .post('/entity')
+    .post('/api')
     .send({ type: "Organization", name: "ACME INC", description: "An example organization"})
     .expect(201)
     .then(function(res) {
@@ -31,7 +31,7 @@ describe('Organization Schema', function() {
 
   it('should be able to retrieve an organization', function(done) {
     request(app)
-    .get('/entity/'+organization.id)
+    .get('/api/'+organization.id)
     .expect(200)
     .then(function(res) {
       if (!res.body.id)
@@ -43,7 +43,7 @@ describe('Organization Schema', function() {
   it('should be able to update an organization', function(done) {
     organization.name = "ACME LIMITED";
     request(app)
-    .put('/entity/'+organization.id)
+    .put('/api/'+organization.id)
     .send(organization)
     .expect(200)
     .then(function(res) {
@@ -55,7 +55,7 @@ describe('Organization Schema', function() {
   
   it('should be able to delete an organization', function(done) {
     request(app)
-    .delete('/entity/'+organization.id)
+    .delete('/api/'+organization.id)
     .expect(204)
     .then(function(res) {
       done();
@@ -64,7 +64,7 @@ describe('Organization Schema', function() {
 
   it('should not be able to retrieve an organization that has been deleted', function(done) {
     request(app)
-    .get('/entity/'+organization.id)
+    .get('/api/'+organization.id)
     .expect(404)
     .then(function(res) {
       if (res.body.id)

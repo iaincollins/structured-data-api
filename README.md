@@ -47,11 +47,11 @@ You can check everything is working with `npm test`.
 
 ##### Database 
 
-If you don't have a MongoDB database running locally or just want to specify a remote server you can passing a connection string as an environment variable before calling `npm start` or `npm test`.
+If you don't have a MongoDB database running locally, or want to specify a remote server or an alternative database name you can passing a connection string as an environment variable before calling `npm start` or `npm test`.
 
     MONGODB=mongodb://username:password@server.example.com:27017/db-name npm start
 
-By default all objects are stored in a MongoDB Collection named "*entities*". You can specify a different Collection name using the COLLECTION environment variable.
+By default all objects are stored in a MongoDB Collection named "*entities*" in a database called "*structured-data*" You can specify a different Collection name using the COLLECTION environment variable.
    
     COLLECTION="things" npm start
    
@@ -128,42 +128,42 @@ For working examples see the `test` directory.
 
 ### Searching
 
-HTTP GET to /entity/search
+HTTP GET to /api/search
 
-    curl http://localhost:3000/entity/search/?name=John+Smith
-    curl http://localhost:3000/entity/search/?type=Person
+    curl http://localhost:3000/api/search/?name=John+Smith
+    curl http://localhost:3000/api/search/?type=Person
 
 To request entities as JSON-LD (still in development):
 
-    curl -H "Accept: application/ld+json" http://localhost:3000/entity/search/?type=Person
+    curl -H "Accept: application/ld+json" http://localhost:3000/api/search/?type=Person
 
 ### Creating
 
-HTTP POST to /entity
+HTTP POST to /api
 
-    curl -X POST -d '{"type": "Person", "name": "John Smith", "description": "Description goes here..."}' -H "Content-Type: application/json" http://localhost:3000/entity
+    curl -X POST -d '{"type": "Person", "name": "John Smith", "description": "Description goes here..."}' -H "Content-Type: application/json" http://localhost:3000/api
 
 ### Retrieving
 
-HTTP GET to /entity/:id
+HTTP GET to /api/:id
 
-    curl http://localhost:3000/entity/9cb1a2bf7f5e321cf8ef0d15
+    curl http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
 
 To request entities as JSON-LD (still in development):
 
-    curl -H "Accept: application/ld+json" http://localhost:3000/entity/9cb1a2bf7f5e321cf8ef0d15
+    curl -H "Accept: application/ld+json" http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
 
 ### Updating
 
-HTTP PUT to /entity/:id
+HTTP PUT to /api/:id
 
-    curl -X PUT -d '{"type": "Person", "name": "Jane Smith", "description": "Updated description..."}' -H "Content-Type: application/json" http://localhost:3000/entity/9cb1a2bf7f5e321cf8ef0d15
+    curl -X PUT -d '{"type": "Person", "name": "Jane Smith", "description": "Updated description..."}' -H "Content-Type: application/json" http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
 
 ### Delete
 
-HTTP DELETE to /entity/:id
+HTTP DELETE to /api/:id
 
-    curl -X DELETE http://localhost:3000/entity/9cb1a2bf7f5e321cf8ef0d15
+    curl -X DELETE http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
 
 ## Roadmap
 

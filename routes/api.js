@@ -1,19 +1,34 @@
 var express = require('express'),
     router = express.Router(),
-    mongoose = require('mongoose'),
-    schemas = require('../lib/schemas');
+    mongoose = require('mongoose');
 
-schemas
-.load()
-.then(function(models) {
+module.exports = function(schemas) {
 
-  var collectionName = schemas.collectionName;
+  var listOfSchemas = [];
+  for (var schemaName in schemas.schemas) listOfSchemas.push(schemaName);
   
+  /**
+   * Return list of all schemas
+   */
+  router.get('/schemas', function(req, res, next) {
+    return res.status(200).json({ schemas: listOfSchemas });
+  });
+
+  /**
+   * Return schema
+   */
+  router.get('/schema/:name', function(req, res, next) {
+    if (schemas.schemas[req.params.name]) {
+      res.status(200).json(schemas.schemas[req.params.name].schema);
+    } else {
+      res.status(404).json({error: 400, message: "Schema not found", requestedUrl: req.originalUrl });
+    }
+  });
+
   /**
    * Search entities
    */
   router.get('/search', function(req, res, next) {
-    
     var query = {};
 
     if (req.query.type)
@@ -26,31 +41,31 @@ schemas
       query.sameAs = req.query.sameAs;
 
     mongoose.connection.db
-    .collection(collectionName)
+    .collection(schemas.collectionName)
     .find(query)
     .toArray(function(err, results) {
       if (err) return res.status(500).json({ error: "Unable to search entities." });
-      
+  
       // For each result, format it using the appropriate Entity model
       var entities = [];
       results.forEach(function(entity) {
-        // Skip models that use a schema that isn't defined
-        if (!models[entity._type])
+        // Skip schemas that use a schema that isn't defined
+        if (!schemas.schemas[entity._type])
           return;
 
-        var model = new models[entity._type].model(entity);
-        
+        var model = new schemas.schemas[entity._type].model(entity);
+    
         if (/application\/ld\+json/.test(req.get('accept'))) {
           entities.push(model.toJSONLD());
         } else {
           entities.push(model);
         }
       });
-      
+  
       return res.status(200).json(entities);
     });    
   });
-  
+
   /**
    * Create entity
    */
@@ -59,11 +74,11 @@ schemas
       return res.status(400).json({ error: "Entity type required." });
 
     var entityType = req.body.type;
-  
-    if (!models[entityType])
+
+    if (!schemas.schemas[entityType])
       return res.status(400).json({ error: "Invalid entity type specified." });
-    
-    var model = new models[entityType].model(req.body)
+
+    var model = new schemas.schemas[entityType].model(req.body)
     model._type = entityType;
     model.save(function(err, entity) {
       if (err)
@@ -81,27 +96,27 @@ schemas
 
     if (!mongoose.Types.ObjectId.isValid(req.params.id))
       return res.status(400).json({ error: "Entity ID format invalid" });
-    
+
     mongoose.connection.db
-    .collection(collectionName)
+    .collection(schemas.collectionName)
     .findOne({_id: mongoose.Types.ObjectId(req.params.id)}, function(err, entity) {
       if (err) return res.status(500).json({ error: "Unable to fetch entity." });
-      
+  
       if (!entity)
         return res.status(404).json({ error: "Entity ID not valid" });
 
-      if (!models[entity._type])
+      if (!schemas.schemas[entity._type])
         return res.status(500).json({ error: "Unable to return entity - entity is of unknown type" });
 
       // Use the appropriate model based on the entity type to load the entity
-      var model = new models[entity._type].model(entity);
+      var model = new schemas.schemas[entity._type].model(entity);
       if (/application\/ld\+json/.test(req.get('accept'))) {
         return res.json(model.toJSONLD());
       } else {
         return res.json(model);
       }
     });
-    
+
   });
 
   /**
@@ -110,20 +125,20 @@ schemas
   router.put('/:id', function(req, res, next) {
     if (req.params.id === null)
        return res.status(400).json({ error: "Entity ID required" });
-  
+
      if (!mongoose.Types.ObjectId.isValid(req.params.id))
        return res.status(400).json({ error: "Entity ID format invalid" });
-  
+
      mongoose.connection.db
-     .collection(collectionName)
+     .collection(schemas.collectionName)
      .findOne({_id: mongoose.Types.ObjectId(req.params.id)}, function(err, entityInDatabase) {
        if (err) return res.status(500).json("Unable to fetch entity.");
-    
+
        if (!entityInDatabase)
          return res.status(404).json({ error: "Entity ID not valid" });
 
        var entity = req.body;
-    
+
        // These properties are immutable (as far as the API is concerned)
        entity._id = entityInDatabase._id;
        entity.__v = entityInDatabase.__v;
@@ -139,7 +154,7 @@ schemas
        // @FIXME: runValidators: true DOES NOT WORK. so values like 'required'
        // are ignored (and fields that should be required can be removed).
        //options:        
-       var model = new models[entityInDatabase._type].model(entity);
+       var model = new schemas.schemas[entityInDatabase._type].model(entity);
        model
        .update(entity, { overwrite: true, runValidators: true }, function(err) {
          if (err)
@@ -161,7 +176,7 @@ schemas
       return res.status(400).json({ error: "Entity ID format invalid" });
 
     mongoose.connection.db
-    .collection(collectionName)
+    .collection(schemas.collectionName)
     .remove({_id: mongoose.Types.ObjectId(req.params.id)}, function(err, entity) {
       if (err) return res.status(500).json({ error: "Unable to delete entity." });
 
@@ -171,8 +186,5 @@ schemas
     });
   });
 
-
-});
-
-
-module.exports = router;
+  return router;
+};

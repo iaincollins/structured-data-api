@@ -6,7 +6,7 @@ describe('Person Schema', function() {
   
   it('should be able to create a person', function(done) {
     request(app)
-    .post('/entity')
+    .post('/api')
     .send({ 
       type: "Person",
       name: "John Smith",
@@ -44,7 +44,7 @@ describe('Person Schema', function() {
 
   it('should be able to retrieve a person', function(done) {
     request(app)
-    .get('/entity/'+person.id)
+    .get('/api/'+person.id)
     .expect(200)
     .then(function(res) {
       if (!res.body.id)
@@ -55,7 +55,7 @@ describe('Person Schema', function() {
   
   it('should be able to search for a person by name', function(done) {
     request(app)
-    .get('/entity/search?name=John+Smith')
+    .get('/api/search?name=John+Smith')
     .expect(200)
     .then(function(res) {
       if (res.body.length < 1)
@@ -66,7 +66,7 @@ describe('Person Schema', function() {
 
   it('should be able to search for a person by type', function(done) {
     request(app)
-    .get('/entity/search?type=Person')
+    .get('/api/search?type=Person')
     .expect(200)
     .then(function(res) {
       if (res.body.length < 1)
@@ -79,13 +79,13 @@ describe('Person Schema', function() {
     person.name = "Jane Smith";
     person.email = "jane.smith@example.com";
     request(app)
-    .put('/entity/'+person.id)
+    .put('/api/'+person.id)
     .send(person)
     .expect(200)
     .then(function(res) {
       // Look up the person again to see that the changes were saved
       request(app)
-      .get('/entity/'+person.id)
+      .get('/api/'+person.id)
       .expect(200)
       .then(function(res) {
         if (res.body.id != person.id)
@@ -107,13 +107,13 @@ describe('Person Schema', function() {
     delete person.email;
     
     request(app)
-    .put('/entity/'+person.id)
+    .put('/api/'+person.id)
     .send(person)
     .expect(200)
     .then(function(res) {
       // Look up the person again to see that the changes were saved
       request(app)
-      .get('/entity/'+person.id)
+      .get('/api/'+person.id)
       .expect(200)
       .then(function(res) {
         if (res.body.description)
@@ -128,7 +128,7 @@ describe('Person Schema', function() {
 
   it('should be able to delete a person', function(done) {
     request(app)
-    .delete('/entity/'+person.id)
+    .delete('/api/'+person.id)
     .expect(204)
     .then(function(res) {
       done();
@@ -137,7 +137,7 @@ describe('Person Schema', function() {
 
   it('should not be able to retrieve a person that has been deleted', function(done) {
     request(app)
-    .get('/entity/'+person.id)
+    .get('/api/'+person.id)
     .expect(404)
     .then(function(res) {
       if (res.body.id)
@@ -148,7 +148,7 @@ describe('Person Schema', function() {
   
   it('should get 400 malformed error for an invalid object ID', function(done) {
     request(app)
-    .get('/entity/abc123')
+    .get('/api/abc123')
     .expect(400)
     .then(function(res) {
       done();

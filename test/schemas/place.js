@@ -6,7 +6,7 @@ describe('Place Schema', function() {
   
   it('should be able to create a place', function(done) {
     request(app)
-    .post('/entity')
+    .post('/api')
     .send({ type: "Place", name: "London", description: "An example place"})
     .expect(201)
     .then(function(res) {
@@ -31,7 +31,7 @@ describe('Place Schema', function() {
 
   it('should be able to retrieve a place', function(done) {
     request(app)
-    .get('/entity/'+place.id)
+    .get('/api/'+place.id)
     .expect(200)
     .then(function(res) {
       if (!res.body.id)
@@ -43,7 +43,7 @@ describe('Place Schema', function() {
   it('should be able to update a place', function(done) {
     place.name = "LONDON, UK";
     request(app)
-    .put('/entity/'+place.id)
+    .put('/api/'+place.id)
     .send(place)
     .expect(200)
     .then(function(res) {
@@ -55,7 +55,7 @@ describe('Place Schema', function() {
   
   it('should be able to delete a place', function(done) {
     request(app)
-    .delete('/entity/'+place.id)
+    .delete('/api/'+place.id)
     .expect(204)
     .then(function(res) {
       done();
@@ -64,7 +64,7 @@ describe('Place Schema', function() {
 
   it('should not be able to retrieve a place that has been deleted', function(done) {
     request(app)
-    .get('/entity/'+place.id)
+    .get('/api/'+place.id)
     .expect(404)
     .then(function(res) {
       if (res.body.id)
