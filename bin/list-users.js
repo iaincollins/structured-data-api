@@ -10,6 +10,7 @@ User.find({}, function(err, users) {
     console.error("Unable to list users.");
     return;
   }
+  
   var i = 0;
   users.forEach(function(user) {
     console.log("### User "+(++i));
