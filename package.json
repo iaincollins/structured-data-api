@@ -1,10 +1,13 @@
 {
   "name": "stuctured-data-api",
-  "version": "0.7.2",
+  "version": "0.8.0",
   "description": "A platform for working with Structured Data",
   "main": "server.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha test/init.js test/routes.js test/schemas.js test/schemas/*.js"
+    "test": "NODE_ENV=test mocha test/init.js test/routes.js test/schemas.js test/schemas/*.js",
+    "add-user": "bin/add-user.js --",
+    "list-users": "bin/list-users.js --",
+    "remove-user": "bin/remove-user.js --"
   },
   "author": "<iain.collins@glitch.digital>",
   "license": "MIT",
@@ -12,6 +15,7 @@
     "body-parser": "^1.15.0",
     "camelcase": "^2.1.1",
     "clone": "^1.0.2",
+    "command-line-args": "^2.1.6",
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "glob-promise": "^1.0.6",

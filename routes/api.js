@@ -1,6 +1,7 @@
 var express = require('express'),
     router = express.Router(),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    User = require('../models/User');
 
 module.exports = function(schemas) {
 
@@ -10,14 +11,14 @@ module.exports = function(schemas) {
   /**
    * Return list of all schemas
    */
-  router.get('/schemas', function(req, res, next) {
+  router.get('/schemas', checkHasReadAccess, function(req, res, next) {
     return res.status(200).json({ schemas: listOfSchemas });
   });
 
   /**
    * Return schema
    */
-  router.get('/schema/:name', function(req, res, next) {
+  router.get('/schema/:name', checkHasReadAccess, function(req, res, next) {
     if (schemas.schemas[req.params.name]) {
       res.status(200).json(schemas.schemas[req.params.name].schema);
     } else {
@@ -28,7 +29,7 @@ module.exports = function(schemas) {
   /**
    * Search entities
    */
-  router.get('/search', function(req, res, next) {
+  router.get('/search', checkHasReadAccess, function(req, res, next) {
     var query = {};
 
     if (req.query.type)
@@ -44,7 +45,7 @@ module.exports = function(schemas) {
     .collection(schemas.collectionName)
     .find(query)
     .toArray(function(err, results) {
-      if (err) return res.status(500).json({ error: "Unable to search entities." });
+      if (err) return res.status(500).json({ error: "Unable to search entities" });
   
       // For each result, format it using the appropriate Entity model
       var entities = [];
@@ -69,20 +70,20 @@ module.exports = function(schemas) {
   /**
    * Create entity
    */
-  router.post('/', function(req, res, next) {
+  router.post('/', checkHasWriteAccess, function(req, res, next) {
     if (!req.body.type)
-      return res.status(400).json({ error: "Entity type required." });
+      return res.status(400).json({ error: "Entity type required" });
 
     var entityType = req.body.type;
 
     if (!schemas.schemas[entityType])
-      return res.status(400).json({ error: "Invalid entity type specified." });
+      return res.status(400).json({ error: "Invalid entity type specified" });
 
     var model = new schemas.schemas[entityType].model(req.body)
     model._type = entityType;
     model.save(function(err, entity) {
       if (err)
-        return res.status(500).json({ error: "Unable to create entity.", message: err.message || null });
+        return res.status(500).json({ error: "Unable to create entity", message: err.message || null });
       return res.status(201).json(entity);
     });
   });
@@ -90,7 +91,7 @@ module.exports = function(schemas) {
   /**
    * Get entity
    */
-  router.get('/:id', function(req, res, next) {
+  router.get('/:id', checkHasReadAccess, function(req, res, next) {
     if (req.params.id === null)
       return res.status(400).json({ error: "Entity ID required" });
 
@@ -100,7 +101,7 @@ module.exports = function(schemas) {
     mongoose.connection.db
     .collection(schemas.collectionName)
     .findOne({_id: mongoose.Types.ObjectId(req.params.id)}, function(err, entity) {
-      if (err) return res.status(500).json({ error: "Unable to fetch entity." });
+      if (err) return res.status(500).json({ error: "Unable to fetch entity" });
   
       if (!entity)
         return res.status(404).json({ error: "Entity ID not valid" });
@@ -122,7 +123,7 @@ module.exports = function(schemas) {
   /**
    * Update entity
    */
-  router.put('/:id', function(req, res, next) {
+  router.put('/:id', checkHasWriteAccess, function(req, res, next) {
     if (req.params.id === null)
        return res.status(400).json({ error: "Entity ID required" });
 
@@ -132,7 +133,7 @@ module.exports = function(schemas) {
      mongoose.connection.db
      .collection(schemas.collectionName)
      .findOne({_id: mongoose.Types.ObjectId(req.params.id)}, function(err, entityInDatabase) {
-       if (err) return res.status(500).json("Unable to fetch entity.");
+       if (err) return res.status(500).json("Unable to fetch entity");
 
        if (!entityInDatabase)
          return res.status(404).json({ error: "Entity ID not valid" });
@@ -158,7 +159,8 @@ module.exports = function(schemas) {
        model
        .update(entity, { overwrite: true, runValidators: true }, function(err) {
          if (err)
-           return res.status(500).json({ error: "Unable to save changes to entity.", message: err.message || null });
+           return res.status(500).json({ error: "Unable to save changes to entity", message: err.message || null });
+         
          return res.json(entity);
       });
     });
@@ -168,7 +170,7 @@ module.exports = function(schemas) {
   /**
    * Delete entity
    */
-  router.delete('/:id', function(req, res, next) {
+  router.delete('/:id', checkHasWriteAccess, function(req, res, next) {
     if (req.params.id === null)
       return res.status(400).json({ error: "Entity ID required" });
 
@@ -178,13 +180,42 @@ module.exports = function(schemas) {
     mongoose.connection.db
     .collection(schemas.collectionName)
     .remove({_id: mongoose.Types.ObjectId(req.params.id)}, function(err, entity) {
-      if (err) return res.status(500).json({ error: "Unable to delete entity." });
+      if (err) return res.status(500).json({ error: "Unable to delete entity" });
 
       if (!entity)
         return res.status(404).json({ error: "Entity has already been deleted" });
+      
       return res.status(204).json();
     });
   });
 
+  /**
+   * By default everyone has read access (without an API Key).
+   */
+  function checkHasReadAccess(req, res, next) {
+    return next();
+  };
+
+  /**
+   * By default only admin users have write access
+   */
+  function checkHasWriteAccess(req, res, next) {
+    var apiKey = req.headers['x-api-key'] || null;
+    User
+    .findOne({ apiKey: apiKey })
+    .exec(function(err, user) {
+      if (err)
+        return res.status(500).json({ error: "Unable to authenticate API Key", message: err.message || null });
+
+      if (!user)
+        return res.status(403).json({ error: "Access denied - API Key invalid" });
+
+      if (user.role != 'ADMIN')
+        return res.status(403).json({ error: "Access denied - Account does not have write access" });
+      
+      return next();
+    });
+  };
+  
   return router;
 };

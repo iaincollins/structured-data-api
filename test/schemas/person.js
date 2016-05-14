@@ -7,6 +7,7 @@ describe('Person Schema', function() {
   it('should be able to create a person', function(done) {
     request(app)
     .post('/api')
+    .set('x-api-key', global.user.apiKey)
     .send({ 
       type: "Person",
       name: "John Smith",
@@ -80,6 +81,7 @@ describe('Person Schema', function() {
     person.email = "jane.smith@example.com";
     request(app)
     .put('/api/'+person.id)
+    .set('x-api-key', global.user.apiKey)
     .send(person)
     .expect(200)
     .then(function(res) {
@@ -109,6 +111,7 @@ describe('Person Schema', function() {
     request(app)
     .put('/api/'+person.id)
     .send(person)
+    .set('x-api-key', global.user.apiKey)
     .expect(200)
     .then(function(res) {
       // Look up the person again to see that the changes were saved
@@ -129,6 +132,7 @@ describe('Person Schema', function() {
   it('should be able to delete a person', function(done) {
     request(app)
     .delete('/api/'+person.id)
+    .set('x-api-key', global.user.apiKey)
     .expect(204)
     .then(function(res) {
       done();

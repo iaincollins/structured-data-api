@@ -7,6 +7,7 @@ describe('Organization Schema', function() {
   it('should be able to create an organization', function(done) {
     request(app)
     .post('/api')
+    .set('x-api-key', global.user.apiKey)
     .send({ type: "Organization", name: "ACME INC", description: "An example organization"})
     .expect(201)
     .then(function(res) {
@@ -44,6 +45,7 @@ describe('Organization Schema', function() {
     organization.name = "ACME LIMITED";
     request(app)
     .put('/api/'+organization.id)
+    .set('x-api-key', global.user.apiKey)
     .send(organization)
     .expect(200)
     .then(function(res) {
@@ -56,6 +58,7 @@ describe('Organization Schema', function() {
   it('should be able to delete an organization', function(done) {
     request(app)
     .delete('/api/'+organization.id)
+    .set('x-api-key', global.user.apiKey)
     .expect(204)
     .then(function(res) {
       done();

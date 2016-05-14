@@ -7,6 +7,7 @@ describe('Event Schema', function() {
   it('should be able to create an event', function(done) {
     request(app)
     .post('/api')
+    .set('x-api-key', global.user.apiKey)
     .send({ type: "Event", name: "The Big Bang", description: "In the beginning" })
    .expect(201)
     .then(function(res) {
@@ -44,6 +45,7 @@ describe('Event Schema', function() {
     event.name = "In the Beginning";
     request(app)
     .put('/api/'+event.id)
+    .set('x-api-key', global.user.apiKey)
     .send(event)
     .expect(200)
     .then(function(res) {
@@ -56,6 +58,7 @@ describe('Event Schema', function() {
   it('should be able to delete an event', function(done) {
     request(app)
     .delete('/api/'+event.id)
+    .set('x-api-key', global.user.apiKey)
     .expect(204)
     .then(function(res) {
       done();
@@ -65,6 +68,7 @@ describe('Event Schema', function() {
   it('should not be able to retrieve an event that has been deleted', function(done) {
     request(app)
     .get('/api/'+event.id)
+    .set('x-api-key', global.user.apiKey)
     .expect(404)
     .then(function(res) {
       if (res.body.id)

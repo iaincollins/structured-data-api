@@ -7,6 +7,7 @@ describe('Place Schema', function() {
   it('should be able to create a place', function(done) {
     request(app)
     .post('/api')
+    .set('x-api-key', global.user.apiKey)
     .send({ type: "Place", name: "London", description: "An example place"})
     .expect(201)
     .then(function(res) {
@@ -44,6 +45,7 @@ describe('Place Schema', function() {
     place.name = "LONDON, UK";
     request(app)
     .put('/api/'+place.id)
+    .set('x-api-key', global.user.apiKey)
     .send(place)
     .expect(200)
     .then(function(res) {
@@ -56,6 +58,7 @@ describe('Place Schema', function() {
   it('should be able to delete a place', function(done) {
     request(app)
     .delete('/api/'+place.id)
+    .set('x-api-key', global.user.apiKey)
     .expect(204)
     .then(function(res) {
       done();

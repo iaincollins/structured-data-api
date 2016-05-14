@@ -4,6 +4,10 @@ This is a simple platform to easily create Search, Create, Retrieve, Update and 
 
 It comes with schemas for People, Places, Organizations, Events and Quotes and is easy to extend just by editing *JSON-schema* files in the `./schemas/` directory.
 
+It provides a simple system to generate API keys, with public read access and API keys being required to make changes (i.e. Creating, Updating and Deleting).
+
+You are encouraged to fork and adapt this codebase.
+
 ## About this platform
 
 This platform uses Node.js, with the Express and Mongoose libraries to allow for rapid application development and quick prototyping for projects that involve structured data.
@@ -124,7 +128,48 @@ For a list of Triplestores, see:  https://en.wikipedia.org/wiki/List_of_subject-
 
 ## How to use the REST API
 
-For working examples see the `test` directory.
+### Authentication
+
+The API supports access control to limit who can make changes.
+
+* Searching and Retrieving do not require an API key to be passed.
+* Creating, Updating and Deleting require an API key.
+
+Note: To modify this behaviour see the `checkHasReadAccess` and `checkHasWriteAccess` methods in `./routes/api.js`.
+
+To run the examples you'll first have to run the `add-user` script to create a user account and obtain an API key.
+
+You will need to pass this API key in the 'x-api-key' header in each request, as shown in the examples below.
+
+#### Creating a user account
+
+Use the `add-user` command line script to generate an API key:
+
+    bin/add-user.js --name="Jane Smith" --email="jane.smith@example.com"
+
+Both the **email address** and the **API key** values are unique.
+
+i.e. There can be only one user account for an email address and different email address cannot have the same API key.
+
+#### Listing user accounts
+
+Use the `list-users` command line script to list all users:
+
+    bin/list-users.js
+
+#### Removing a user account
+
+Use the `remove-user` command line script to remove a user by ID:
+
+    bin/remove-user.js --id="57372a11371f140a2ad10b07"
+    
+You can also remove users by specifying their API key:
+
+    bin/remove-user.js --api-key="410f82fae1f22b9a356b3264b2611eaf"
+    
+…or email address:
+
+    bin/remove-user.js --email="jane.smith@example.com"
 
 ### Searching
 
@@ -141,7 +186,7 @@ To request entities as JSON-LD (still in development):
 
 HTTP POST to /api
 
-    curl -X POST -d '{"type": "Person", "name": "John Smith", "description": "Description goes here..."}' -H "Content-Type: application/json" http://localhost:3000/api
+    curl -X POST -d '{"type": "Person", "name": "John Smith", "description": "Description goes here..."}' -H "Content-Type: application/json" -H "x-api-key: c13caddb5c331a2dc01a7ca24cd49f71" http://localhost:3000/api
 
 ### Retrieving
 
@@ -157,23 +202,22 @@ To request entities as JSON-LD (still in development):
 
 HTTP PUT to /api/:id
 
-    curl -X PUT -d '{"type": "Person", "name": "Jane Smith", "description": "Updated description..."}' -H "Content-Type: application/json" http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
+    curl -X PUT -d '{"type": "Person", "name": "Jane Smith", "description": "Updated description..."}' -H "Content-Type: application/json" -H "x-api-key: c13caddb5c331a2dc01a7ca24cd49f71" http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
 
 ### Delete
 
 HTTP DELETE to /api/:id
 
-    curl -X DELETE http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
+    curl -X DELETE -H "x-api-key: c13caddb5c331a2dc01a7ca24cd49f71" http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
 
 ## Roadmap
 
 The following features are on the immediate roadmap:
 
-* Provide a login and auth system to limit Creating, Updating and Deleting entires to authorized users.
-* A web based interface with to manage entities, users, and documentation.
+* Web based interface with to manage entities and users.
+* Web based documentation.
+* Add JSON-LD support.
 * Add more powerful searching (e.g. free text, based on properties other than name, type and ID, etc).
-* Add option to configure collections and API paths.
-* Add JSON-LD support (in development).
 
 ## Contributing
 

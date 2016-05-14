@@ -7,6 +7,7 @@ describe('Quotation Schema', function() {
   it('should be able to create a quotation', function(done) {
     request(app)
     .post('/api')
+    .set('x-api-key', global.user.apiKey)
     .send({ 
       type: "Quotation",
       name: "A well known quote",
@@ -55,6 +56,7 @@ describe('Quotation Schema', function() {
     };
     request(app)
     .put('/api/'+quote.id)
+    .set('x-api-key', global.user.apiKey)
     .send(quote)
     .expect(200)
     .then(function(res) {
@@ -80,6 +82,7 @@ describe('Quotation Schema', function() {
     quote.spokenByCharacter = "57348428372a5abaaf3e1f2b";
     request(app)
     .put('/api/'+quote.id)
+    .set('x-api-key', global.user.apiKey)
     .send(quote)
     .expect(200)
     .then(function(res) {
@@ -102,6 +105,7 @@ describe('Quotation Schema', function() {
     quote.spokenByCharacter = "abc123";
     request(app)
     .put('/api/'+quote.id)
+    .set('x-api-key', global.user.apiKey)
     .send(quote)
     .then(function(res) {
       
@@ -123,6 +127,7 @@ describe('Quotation Schema', function() {
   it('should be able to delete a quotation', function(done) {
     request(app)
     .delete('/api/'+quote.id)
+    .set('x-api-key', global.user.apiKey)
     .expect(204)
     .then(function(res) {
       done();
