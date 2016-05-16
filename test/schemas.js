@@ -24,7 +24,7 @@ describe('Fetch schemas', function() {
     });
   });
   
-  it('should get a 404 response when requesting a schema that doesn\'t exist', function(done) {
+  it('should get a 404 response when requesting a schema that doesn\'t exist',  function(done) {
     request(app)
     .get('/api/schema/SchemaThatDoesNotExist')
     .expect(404)

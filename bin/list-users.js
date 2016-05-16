@@ -13,8 +13,10 @@ User.find({}, function(err, users) {
   
   var i = 0;
   users.forEach(function(user) {
-    console.log("### User "+(++i));
-    console.log(user.toJSON());
+    console.log("API Key: "+user.apiKey
+                +"\tEmail: "+user.email
+                +(user.name ? " ("+user.name+")" : "")
+                );
   });
 
   mongoose.disconnect();

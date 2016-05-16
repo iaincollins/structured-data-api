@@ -7,7 +7,6 @@ var cli = commandLineArgs([
   { name: 'help', alias: 'h', type: Boolean, description: "Display this message" },
   { name: 'verbose', alias: 'v', type: Boolean, description: "Verbose error messages" },
   { name: 'email', alias: 'e', type: String, description: "The email address of the user you want to remove" },
-  { name: 'id', alias: 'i', type: String, description: "The ID of the user you want to remove" },
   { name: 'api-key', alias: 'k', type: String, description: "The API key of the user you want to remove" }
 ])
 

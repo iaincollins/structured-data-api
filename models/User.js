@@ -1,11 +1,10 @@
 var mongoose = require('mongoose'),
     crypto = require('crypto'),
-    serialize = require('../lib/serialize');
+    serialize = require('../lib/serialize'),
+    randomKey = require('random-key');
 
 var schema = new mongoose.Schema({
   name: { type: String, default: '' },
-  organization: { type: String, default: '' },
-  location: { type: String, default: '' },
   email: { type: String, unique: true, lowercase: true, required: true },
   role: { type: String, enum: ['ADMIN', 'USER'], default: 'USER' },
   apiKey: { type: String, unique: true },
@@ -14,7 +13,13 @@ var schema = new mongoose.Schema({
 
 schema.pre('save', function(next) {
   if (this.isNew && !this.apiKey)
-    this.apiKey = crypto.randomBytes(16).toString('hex');
+    this.apiKey = randomKey.generateBase30(5)
+                +"-"+randomKey.generateBase30(5)
+                +"-"+randomKey.generateBase30(5)
+                +"-"+randomKey.generateBase30(5)
+                +"-"+randomKey.generateBase30(5)
+                +"-"+randomKey.generateBase30(5);
+//  crypto.randomBytes(16).toString('hex');
 
   next();
 });

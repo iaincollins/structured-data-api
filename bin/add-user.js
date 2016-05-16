@@ -8,8 +8,6 @@ var cli = commandLineArgs([
   { name: 'verbose', alias: 'v', type: Boolean, description: "Verbose error messages" },
   { name: 'email', alias: 'e', type: String, description: "The users email address (required)" },
   { name: 'name', alias: 'n', type: String, description: "The users name (optional)" },
-  { name: 'organization', alias: 'o', type: String, description: "The organization to which the user belongs (optional)" },
-  { name: 'location', alias: 'l', type: String, description: "The location of the user (optional)" },
   { name: 'api-key', alias: 'k', type: String, description: "A pre-generated API key to assign (optional)" },
 ])
 
@@ -34,7 +32,9 @@ user.save(function(err) {
   mongoose.disconnect();
   
   if (err) {
-    console.error("Failed to create user.");
+    console.error("Failed to add user.");
+    if (err.code == "11000")
+      console.error("Check an account with the same email address or API key does not already exist.");
     if (options.verbose) {
       console.error(err);
     } else {
@@ -43,5 +43,8 @@ user.save(function(err) {
     return;
   }
     
-  console.log("New user created.\n",user.toJSON());
+  console.log("API Key: "+user.apiKey
+            +"\tEmail: "+user.email
+            +(user.name ? " ("+user.name+")" : "")
+            );
 });

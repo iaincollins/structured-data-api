@@ -1,10 +1,14 @@
 {
   "name": "stuctured-data-api",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "A platform for working with Structured Data",
   "main": "server.js",
   "scripts": {
     "test": "NODE_ENV=test mocha test/init.js test/routes.js test/schemas.js test/schemas/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/glitchdigital/structured-data-api.git"
   },
   "author": "<iain.collins@glitch.digital>",
   "license": "MIT",
@@ -24,6 +28,7 @@
     "npm": "^3.8.1",
     "pascalcase": "^0.1.1",
     "pluralize": "^1.2.1",
+    "random-key": "^0.3.2",
     "traverse": "^0.6.6",
     "tv4": "^1.2.7"
   },

@@ -2,7 +2,7 @@
 
 This is a simple platform to easily create Search, Create, Retrieve, Update and Delete (SCRUD) methods for managing Structured Data entities.
 
-It comes with schemas for People, Places, Organizations, Events and Quotes and is easy to extend just by editing *JSON-schema* files in the `./schemas/` directory.
+It comes with schemas for People, Places, Organizations, Events and Quotes and is easy to extend just by editing *JSON-schema* files in the `schemas/` directory.
 
 It provides a simple system to generate API keys, with public read access and API keys being required to make changes (i.e. Creating, Updating and Deleting).
 
@@ -63,7 +63,7 @@ Note: Currently there is no option to change either the REST API routes or to st
 
 ##### Schemas
 
-You can specify a schema dir other that `./schemas` using the SCHEMAS environment variable.
+You can specify a schema dir other that `schemas` using the SCHEMAS environment variable.
 
     SCHEMAS=/usr/local/schemas/ npm start
       
@@ -75,11 +75,9 @@ If don't have Node.js and MongoDB set up locally and want to deploy it to Heroku
 
 ### Modifying schemas
 
-The files in `./schemas/` must be in the **JSON-schema** format:
-http://JSON-schema.org
+The files in `schemas/` are in **JSON-schema** format, which read more about at http://JSON-schema.org
 
-For interoperability with other linked data you might want to follow the schemas at **schema.org**:
-https://schema.org
+For interoperability with other linked data you might want to refer to the schemas at https://schema.org
 
 **Note:**
 
@@ -122,7 +120,7 @@ If you want to reference external entities, you might want to also consider usin
 
 #### SPARQL and Triplestore support
 
-If you have a dedicated Triplestore you could look for the *save* and *remove* hooks in `./lib/schemas.js` to push updates to another data source on every create/update/delete request. Alternatively, some Triplestores like AllegroGraph provide a way to sync them with MongoDB.
+If you have a dedicated Triplestore you could look for the *save* and *remove* hooks in `lib/schemas.js` to push updates to another data source on every create/update/delete request. Alternatively, some Triplestores like AllegroGraph provide a way to sync them with MongoDB.
 
 For a list of Triplestores, see:  https://en.wikipedia.org/wiki/List_of_subject-predicate-object_databases.
 
@@ -134,8 +132,6 @@ The API supports access control to limit who can make changes.
 
 * Searching and Retrieving do not require an API key to be passed.
 * Creating, Updating and Deleting require an API key.
-
-Note: To modify this behaviour see the `checkHasReadAccess` and `checkHasWriteAccess` methods in `./routes/api.js`.
 
 To run the examples you'll first have to run the `add-user` script to create a user account and obtain an API key.
 
@@ -170,6 +166,10 @@ You can also remove users by specifying their API key:
 …or email address:
 
     bin/remove-user.js --email="jane.smith@example.com"
+
+#### Customising authentication behaviour 
+
+If you want to modify authentication behaviour you can customise the `checkHasReadAccess` and `checkHasWriteAccess` methods in `routes/api.js`.
 
 ### Searching
 
