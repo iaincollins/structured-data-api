@@ -20,12 +20,12 @@ module.exports = function(schemas) {
    */
   router.get('/schema/:name', checkHasReadAccess, function(req, res, next) {
     if (schemas.schemas[req.params.name]) {
-      res.status(200).json(schemas.schemas[req.params.name].schema);
+      res.status(200).json(schemas.schemas[req.params.name].schema);      
     } else {
       res.status(404).json({error: 400, message: "Schema not found", requestedUrl: req.originalUrl });
     }
   });
-
+  
   /**
    * Search entities
    */

@@ -185,22 +185,23 @@ You can also remove users by specifying their API key:
 
 If you want to modify authentication behaviour you can customise the `checkHasReadAccess` and `checkHasWriteAccess` methods in `routes/api.js`.
 
-### Searching
+### Retrieve available schemas
 
-HTTP GET to /api/search
+HTTP GET to /api/schemas
 
-    curl http://localhost:3000/api/search/?name=John+Smith
-    curl http://localhost:3000/api/search/?type=Person
+    curl http://localhost:3000/api/schemas
+    
+### Retrieve a schema
 
-To request entities as JSON-LD (still in development):
+HTTP GET to /api/schemas/:schemaName
 
-    curl -H "Accept: application/ld+json" http://localhost:3000/api/search/?type=Person
+    curl http://localhost:3000/api/schema/Person
 
 ### Creating
 
 HTTP POST to /api
 
-    curl -X POST -d '{"type": "Person", "name": "John Smith", "description": "Description goes here..."}' -H "Content-Type: application/json" -H "x-api-key: c13caddb5c331a2dc01a7ca24cd49f71" http://localhost:3000/api
+    curl -X POST -d '{"type": "Person", "name": "John Smith", "description": "Description goes here..."}' -H "Content-Type: application/json" -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" http://localhost:3000/api
 
 ### Retrieving
 
@@ -216,21 +217,32 @@ To request entities as JSON-LD (still in development):
 
 HTTP PUT to /api/:id
 
-    curl -X PUT -d '{"type": "Person", "name": "Jane Smith", "description": "Updated description..."}' -H "Content-Type: application/json" -H "x-api-key: c13caddb5c331a2dc01a7ca24cd49f71" http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
+    curl -X PUT -d '{"type": "Person", "name": "Jane Smith", "description": "Updated description..."}' -H "Content-Type: application/json" -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
 
-### Delete
+### Deleting
 
 HTTP DELETE to /api/:id
 
-    curl -X DELETE -H "x-api-key: c13caddb5c331a2dc01a7ca24cd49f71" http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
+    curl -X DELETE -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
+
+### Searching
+
+HTTP GET to /api/search
+
+    curl http://localhost:3000/api/search/?name=John+Smith
+    curl http://localhost:3000/api/search/?type=Person
+
+To request entities as JSON-LD (still in development):
+
+    curl -H "Accept: application/ld+json" http://localhost:3000/api/search/?type=Person
 
 ## Roadmap
 
 The following features are on the immediate roadmap:
 
-* Web based interface with to manage entities and users.
-* Web based documentation.
-* Add JSON-LD support.
+* JSON-LD support.
+* A web based interface with to manage entities.
+* A web based interface with to manage user accounts / API keys.
 * Add more powerful searching (e.g. free text, based on properties other than name, type and ID, etc).
 
 ## Contributing
