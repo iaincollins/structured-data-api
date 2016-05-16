@@ -193,14 +193,23 @@ module.exports = function(schemas) {
    * By default everyone has read access (without an API Key).
    */
   function checkHasReadAccess(req, res, next) {
+    
+    // To restrict *read* access to only those with accounts,
+    // you can remove this line and uncomment the block below.
     return next();
-  };
 
-  /**
-   * By default only admin users have write access
-   */
-  function checkHasWriteAccess(req, res, next) {
+    /*
     var apiKey = req.headers['x-api-key'] || null;
+
+    if (!apiKey)
+      return res.status(403).json({ error: "Access denied - API Key required" });
+    
+    // If the ADMIN_API_KEY env var is specified check the key against it
+    if (process.env.ADMIN_API_KEY
+        && req.headers['x-api-key'] == process.env.ADMIN_API_KEY)
+       return next(); 
+
+    // Lookup user, check their key is valid
     User
     .findOne({ apiKey: apiKey })
     .exec(function(err, user) {
@@ -210,6 +219,37 @@ module.exports = function(schemas) {
       if (!user)
         return res.status(403).json({ error: "Access denied - API Key invalid" });
 
+      return next();
+      
+    });
+    */
+  };
+
+  /**
+   * By default only ADMIN users have write access
+   */
+  function checkHasWriteAccess(req, res, next) {
+    var apiKey = req.headers['x-api-key'] || null;
+
+    if (!apiKey)
+      return res.status(403).json({ error: "Access denied - API Key required" });
+    
+    // If the ADMIN_API_KEY env var is specified check the key against it
+    if (process.env.ADMIN_API_KEY
+        && req.headers['x-api-key'] == process.env.ADMIN_API_KEY)
+       return next(); 
+    
+    // Lookup user, check their key is valid & they are an ADMIN (write access)
+    User
+    .findOne({ apiKey: apiKey })
+    .exec(function(err, user) {
+      if (err)
+        return res.status(500).json({ error: "Unable to authenticate API Key", message: err.message || null });
+
+      if (!user)
+        return res.status(403).json({ error: "Access denied - API Key invalid" });
+
+      // Account must have "ADMIN"" access to make changes
       if (user.role != 'ADMIN')
         return res.status(403).json({ error: "Access denied - Account does not have write access" });
       

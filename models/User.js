@@ -19,7 +19,6 @@ schema.pre('save', function(next) {
                 +"-"+randomKey.generateBase30(5)
                 +"-"+randomKey.generateBase30(5)
                 +"-"+randomKey.generateBase30(5);
-//  crypto.randomBytes(16).toString('hex');
 
   next();
 });

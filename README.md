@@ -6,7 +6,7 @@ It comes with schemas for People, Places, Organizations, Events and Quotes and i
 
 It provides a simple system to generate API keys, with public read access and API keys being required to make changes (i.e. Creating, Updating and Deleting).
 
-You are encouraged to fork and adapt this codebase.
+You are encouraged to fork and adapt this codebase to your own needs.
 
 ## About this platform
 
@@ -66,7 +66,13 @@ Note: Currently there is no option to change either the REST API routes or to st
 You can specify a schema dir other that `schemas` using the SCHEMAS environment variable.
 
     SCHEMAS=/usr/local/schemas/ npm start
-      
+
+##### Admin API key
+
+You can create user accounts to control write access, but if you want to you can also set an Admin API Key at runtime using the ADMIN_API_KEY environment variable. This can be useful when deploying on services like Heroku.
+
+    ADMIN_API_KEY="ABCD-1234-5789-EFGH" npm start
+    
 #### Deploy to Heroku
 
 If don't have Node.js and MongoDB set up locally and want to deploy it to Heroku you can use the following link deploy a free instance (it will also setup and connect to a free database with mLab for you too).
@@ -133,10 +139,18 @@ The API supports access control to limit who can make changes.
 * Searching and Retrieving do not require an API key to be passed.
 * Creating, Updating and Deleting require an API key.
 
-To run the examples you'll first have to run the `add-user` script to create a user account and obtain an API key.
-
 You will need to pass this API key in the 'x-api-key' header in each request, as shown in the examples below.
 
+To get an API Key you can either:
+
+* Run the `add-user` script to create a user account and obtain an API key (see details below).
+
+* Set the ADMIN_API_KEY environment variable at run time.
+
+    e.g. `ADMIN_API_KEY="ABCD-1234-5789-EFGH" npm start`
+
+    This option is useful if you only have one account that needs write access and you are deploying to somewhere like Heroku and don't want to have to SSH in to create a user.
+    
 #### Creating a user account
 
 Use the `add-user` command line script to generate an API key:
