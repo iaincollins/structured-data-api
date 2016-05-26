@@ -49,6 +49,8 @@ You can check everything is working with `npm test`.
 
 #### Configuration options
 
+Note: See also "Advanced usage" for additional options.
+
 ##### Database 
 
 If you don't have a MongoDB database running locally, or want to specify a remote server or an alternative database name you can passing a connection string as an environment variable before calling `npm start` or `npm test`.
@@ -69,10 +71,10 @@ You can specify a schema dir other that `schemas` using the SCHEMAS environment 
 
 ##### Admin API key
 
-You can create user accounts to control write access, but if you want to you can also set an Admin API Key at runtime using the ADMIN_API_KEY environment variable. This can be useful when deploying on services like Heroku.
+You can create user accounts to control write access, but if you want to you can also set an Admin API Key at runtime using the ADMIN\_API\_KEY environment variable. This can be useful when deploying on services like Heroku.
 
     ADMIN_API_KEY="ABCD-1234-5789-EFGH" npm start
-    
+
 #### Deploy to Heroku
 
 If don't have Node.js and MongoDB set up locally and want to deploy it to Heroku you can use the following link deploy a free instance (it will also setup and connect to a free database with mLab for you too).
@@ -93,36 +95,6 @@ For interoperability with other linked data you might want to refer to the schem
 That there are two different schema formats in JSON can be confusing. While designed with different use cases in mind, they are similar in many ways but each has unique features.
 
 For example: *JSON-LD* is used to described Linked Data objects between computer systems (e.g. web sites and search engines) while *JSON-schema* is intended to used by people to describe the schema to the computer and things like validation for properties what error message to display if something is incorrectly formatted.
-
-Note: Something that converts *JSON-LD* files to *JSON-schema* files would be helpful here, as it would make it easy to import JSON-LD schemas from sites like schema.org in bulk.
-
-#### Referencing other entities in a schema
-
-Properties can be defined as referring to ObjectId's. This is not part of the JSON-schema standard, but extends it.
-
-    "myProperty": { "type": "string", "format": "objectid" }
-
-Properties defined like this will treated like actual ObjectIDs internally (and not just stored as strings).
-
-The exception is that that if used with "mixed type" property (i.e. in conjunction with "oneOf" or "anyOf" in a schema) it will still be validated correctly however will be (incorrectly) stored in the database as a string and not an ObjectID.
-
-For example, in this case either an object matching the "Person" schema or a string that is formated as an ObjectID is valid but in the case of an ObjectID it will be stored as string internally.
-
-    "myProperty": {
-      "oneOf": [ 
-         {  "type": "string", "format": "objectid" },
-         {  $ref: "Person.json }
-      ]
-    }
-
-If you want to reference external entities, you might want to also consider using URIs:
-
-    "myProperty": {
-      "oneOf": [ 
-         {  "type": "string", "format": "uri" },
-         {  $ref: "Person.json }
-      ]
-    }
 
 #### SPARQL and Triplestore support
 
@@ -145,7 +117,7 @@ To get an API Key you can either:
 
 * Run the `add-user` script to create a user account and obtain an API key (see details below).
 
-* Set the ADMIN_API_KEY environment variable at run time.
+* Set the ADMIN\_API\_KEY environment variable at run time.
 
     e.g. `ADMIN_API_KEY="ABCD-1234-5789-EFGH" npm start`
 
@@ -235,6 +207,122 @@ HTTP GET to /api/search
 To request entities as JSON-LD (still in development):
 
     curl -H "Accept: application/ld+json" http://localhost:3000/api/search/?type=Person
+
+## Advanced usage
+
+### ObjectID format support
+
+Properties can be defined as referring to ObjectId's. This is not part of the JSON-schema standard, but extends it.
+
+    "myProperty": { "type": "string", "format": "objectid" }
+
+Properties defined like this will treated like actual ObjectIDs internally (and not just stored as strings).
+
+The exception is that that if used with "mixed type" property (i.e. in conjunction with "oneOf" or "anyOf" in a schema) it will still be validated correctly however will be (incorrectly) stored in the database as a string and not an ObjectID.
+
+For example, in this case either an object matching the "Person" schema or a string that is formated as an ObjectID is valid but in the case of an ObjectID it will be stored as string internally.
+
+    "myProperty": {
+      "oneOf": [ 
+         {  "type": "string", "format": "objectid" },
+         {  $ref: "Person.json }
+      ]
+    }
+
+If you want to reference external entities, you might want to also consider using URIs:
+
+    "myProperty": {
+      "oneOf": [ 
+         {  "type": "string", "format": "uri" },
+         {  $ref: "Person.json }
+      ]
+    }
+
+### Referencing other entities in a schema
+
+You can safely reference other schema files in your schemas.
+
+By filename:
+
+    "birthPlace": {
+      "$ref": "Place.json"
+    }
+
+By URI:
+
+    "birthPlace": {
+      "$ref": "http://example.com/place.json"
+    }
+
+By fragment:
+
+    "birthPlace": {
+      "$ref": "Place.json#/definitions/PostalAddress"
+    }
+
+* If any *remote* schemas are unavailable at startup your server will not start (!). To avoid this you may wish to consider referencing only local copies.
+
+* If any of your schemas contain circular references (e.g. Schema\_A references Schema\_B -> Schema\_B references Schema\_C -> Schema\_C references Schema\_A) then this will impact validation. See "Circular references" below for more information.
+
+### Customing reference handling
+
+Instead of automatically seralizing references by including referenced schemas you can set the environment variable REPLACE\_REF to change the default behaviour.
+
+You can use it o replace $ref values in schemas with other types - either an "object", a "uri" or a database "objectid".
+
+For example if your schema contains a $ref value (either locally or remote):
+
+    "birthPlace": {
+      "$ref": "http://example.com/place.json"
+    }
+
+Then the default behaviour is to include the referenced schema, resulting in:
+
+    birthPlace: {
+      $schema: "http://json-schema.org/schema#",
+      title: "Place Schema",
+      type: "object",
+      properties: {
+        // List of properties
+      }
+    }
+
+Using `REPLACE_REF="uri" npm start` would do this:
+
+    birthPlace: {
+      type: "string",
+      format: "uri",
+      description: "The URL of a resource matching the schema http://example.com/place.json"
+    }
+
+Using `REPLACE_REF="object" npm start` would do this:
+
+    birthPlace: {
+      type: "object",
+      properties: { },
+      additionalProperties: true,
+      description: "An object matching the schema http://example.com/place.json"
+    }
+
+
+Using `REPLACE_REF="objectid" npm start` would do this:
+
+    birthPlace: {
+      type: "string",
+      format: "objectid",
+      pattern: "^[0-9a-fA-F]{24}$",
+      description: "The ObjectID of an object in the database matching the schema http://example.com/place.json"
+    }
+
+Note that setting REPLACE\_REF impacts ALL references in ALL schemas (execept circular references - see the section "Circular references" below).
+
+### Circular references
+
+The the validator can't currently handle schemas with circular references.
+
+The default behaviour when it detrects circular references in a schema is to treat the properties that reference other schemas in that schema to plain objects and to skip validation of those properties (i.e. allow any object).
+
+You can use the REPLACE\_CIRCULAR\_REF environment variable just like REPLACE\_REF but to impact only schemas with circular references - so you can have schemas with circular references instead require URIs or ObjectIDs for entities they reference, instead of plain objects.
 
 ## Roadmap
 
