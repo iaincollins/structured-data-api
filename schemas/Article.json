@@ -35,10 +35,7 @@
     "articleSection": {
       "type": "string"
     },
-    "pageStart": {
-      "type": "string"
-    },
-    "pageEnd": {
+    "keywords": {
       "type": "string"
     },
     "wordCount": {
