@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Article Schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "image": {
+      "type": "string",
+      "format": "uri"
+    },
+    "dateCreated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "datePublished": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "dateModified": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "articleBody": {
+      "type": "string"
+    },
+    "articleSection": {
+      "type": "string"
+    },
+    "pageStart": {
+      "type": "string"
+    },
+    "pageEnd": {
+      "type": "string"
+    },
+    "wordCount": {
+      "type": "integer"
+    },
+    "author": {
+      "oneOf": [
+        { "$ref": "Person.json" },
+        { "$ref": "Organization.json" }
+      ]
+    },
+    "publisher": {
+      "$ref": "Organization.json"
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false
+}

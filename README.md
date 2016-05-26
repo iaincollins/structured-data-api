@@ -18,6 +18,7 @@ The focus of this platform is utility and ease of use. It aims to be informed by
 
 It currently includes example schemas for:
 
+* [Articles](schemas/Article.json)
 * [People](schemas/Person.json)
 * [Places](schemas/Place.json)
 * [Organizations](schemas/Organization.json)
