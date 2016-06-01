@@ -6,9 +6,13 @@ This is a simple server to easily create Search, Create, Retrieve, Update and De
 
 It comes with schemas for People, Places, Organizations, Events and Quotes and is easy to extend just by editing *JSON-schema* files in the `schemas` directory.
 
-It provides a simple system to generate API keys, with public read access and API keys being required to make changes (i.e. Creating, Updating and Deleting).
+API end-points, documentation, database storage, validation are all handled automatically - you just need to edit schemas and restart the sever for changes to take effect (no coding required, just a little configuration).
 
-You are encouraged to fork and adapt this codebase to your own needs.
+It provides a simple system to generate API keys, with public read access and API keys being required to make changes (i.e. Creating, Updating and Deleting) and takes care of serving schemas, validation and exporting data as JSON-LD.
+
+The web front end looks like this: https://api.glitch.digital
+
+You are encouraged to fork and adapt this codebase to your own needs!
 
 ## About this platform
 
@@ -59,16 +63,20 @@ Note: See also "Advanced usage" for additional options.
 If you don't have a MongoDB database running locally, or want to specify a remote server or an alternative database name you can passing a connection string as an environment variable before calling `npm start` or `npm test`.
 
     MONGODB=mongodb://username:password@server.example.com:27017/db-name npm start
+    
+If you want your site to display your own name instead of "Structured Data API" but don't want to have to edit the templates, you can use the SITE\_NAME environment variable.
 
-You can specify the base uri to use in all absolute URLS (including IDs for entites and the URLs for schemas) using BASE\_URI environment variable.
+    SITE_NAME="Acme Inc." npm start
 
-    BASE_URI="https://yourserver.example.com"
+You can specify the base uri to use in all absolute URLS (including IDs for entites and the URLs for schemas) using BASE\_URI environment variable. It is strongly recommended you eplicitly set this as auto-dection does not always work well mwhen behind a load balancer or proxy (e.g. Heroku).
+
+    BASE_URI="https://yourserver.example.com" npm start
 
 When requesting JSON-LD resources the default value for @context field is "http://schema.org/" (as that's one of the most common shared defintions) and it assumes your schema is named appropriately (e.g. if you have a schema called "Person" that it follows http://schema.org/Person).
 
 If you are not creating schema that follow schema.org and want to use your own value for @context use the CONTEXT\_URI environment variable.
 
-    CONTEXT_URI="https://yourserver.example.com"
+    CONTEXT_URI="https://yourserver.example.com" npm start
 
 ##### Schemas
 
@@ -89,6 +97,10 @@ You can create user accounts to control write access, but if you want to you can
 If don't have Node.js and MongoDB set up locally and want to deploy it to Heroku you can use the following link deploy a free instance (it will also setup and connect to a free database with mLab for you too).
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/glitchdigital/structured-data-api)
+
+Note: If you are using Heroku, you'll want to set a value for ADMIN\_API\_KEY you can use to create and edit entries via the API and to set the BASE\_URI to whatever the name of your site is on Heroku:
+
+    BASE_URI="http://myapp.herokuapp.com"
 
 ### Modifying schemas
 
