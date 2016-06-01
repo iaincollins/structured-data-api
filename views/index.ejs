@@ -1,15 +1,16 @@
-<h1 style="margin-top: 0;"><%= siteName %></h1>
+<h2 style="margin-top: 0;"><%= siteName %></h2>
 
 <p>
   The following schemas are supported by this API.
 </p>
+
 <ul>
 <% schemas.forEach(function(schema) { %>
   <li><a href="docs/<%= schema %>"><%= schema %></a></li>
 <% }) %>
 </ul>
 
-<h3>Example API Usage</h3>
+<h3>How to use the API</h3>
 <p>See the README file for futher examples, including how to generate API keys.</p>
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
   <h4>Retrieve available schemas</h4>
@@ -119,3 +120,8 @@
   <p>You can also request a JSON-LD response:</p>
   <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl -H "Accept: application/ld+json" <%= baseUri %>/Person/search?name=Foo+Bar</pre>
 </div>
+
+
+<p>
+  <a href="https://github.com/glitchdigital/structured-data-api"><strong>Structured Data API</strong></a> platform from <a href="http://glitch.digital"><strong>glitch.digital</strong></a>
+</p>
