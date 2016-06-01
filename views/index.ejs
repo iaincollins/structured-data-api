@@ -40,8 +40,8 @@
   <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">{
   "name": "John Smith",
   "description": "Description of the person",
-  "@id": "http://localhost:3000/Person/574ed54f984b8479174bdb55",
-  "@type": "http://localhost:3000/Person"
+  "@id": "<%= baseUri %>/Person/574ed54f984b8479174bdb55",
+  "@type": "<%= baseUri %>/Person"
 }</pre>
 </div>
 
@@ -65,8 +65,8 @@
       "addressLocality": "London"
     }
   },
-  "@id": "http://localhost:3000/Person/574ed54f984b8479174bdb55",
-  "@type": "http://localhost:3000/Person"
+  "@id": "<%= baseUri %>/Person/574ed54f984b8479174bdb55",
+  "@type": "<%= baseUri %>/Person"
 }</pre>
 </div>
 
@@ -85,8 +85,8 @@
   "name": "John Smith",
   "description": "Description of the person",
   "birthDate": "2000-01-01T00:00:00.000Z",
-  "@id": "http://localhost:3000/Person/574ec75f2fc287930d08e593",
-  "@type": "http://localhost:3000/Person"
+  "@id": "<%= baseUri %>/Person/574ec75f2fc287930d08e593",
+  "@type": "<%= baseUri %>/Person"
 }</pre>
 </div>
 
@@ -104,14 +104,14 @@
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
   <h4>Search entities</h4>
   <p>You can search for entities by name (e.g "?name=John+Smith") or type ("?type=Person")
-  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /:schema/search/?:params</pre>
+  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /:schema/search?:params</pre>
   <h5 class="mdl-color-text--grey-600">Example</h5>
-  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl <%= baseUri %>/Person/search/?name=John+Smith</pre>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl <%= baseUri %>/Person/search?name=John+Smith</pre>
   <h5 class="mdl-color-text--grey-600">Example response</h5>
   <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">[{
   "name": "John Smith",
   "description": "Description of the person",
-  "@id": "http://localhost:3000/Person/574ed54f984b8479174bdb55",
-  "@type": "http://localhost:3000/Person"
+  "@id": "<%= baseUri %>/Person/574ed54f984b8479174bdb55",
+  "@type": "<%= baseUri %>/Person"
 }]</pre>
 </div>

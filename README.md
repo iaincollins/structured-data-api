@@ -40,7 +40,7 @@ Once downloaded, install and run with:
     npm install
     npm start
 
-The server willl then be running at `http://localhost:3000`. Please note there is no web based user inteface yet, just a RESTful API!
+The server willl then be running at `http://example.com`. Please note there is no web based user inteface yet, just a RESTful API!
 
 #### Testing
 
@@ -170,51 +170,51 @@ If you want to modify authentication behaviour you can customise the `checkHasRe
 
 HTTP GET to /schemas
 
-    curl http://localhost:3000/schemas
+    curl http://example.com/schemas
     
 ### Retrieve a schema
 
 HTTP GET to /:schemaName
 
-    curl http://localhost:3000/Person
+    curl http://example.com/Person
 
 ### Creating
 
 HTTP POST to /:schemaName
 
-    curl -X POST -d '{"name": "John Smith", "description": "Description goes here..."}' -H "Content-Type: application/json" -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" http://localhost:3000/Person
+    curl -X POST -d '{"name": "John Smith", "description": "Description goes here..."}' -H "Content-Type: application/json" -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" http://example.com/Person
 
 ### Retrieving
 
 HTTP GET to /:schemaName/:id
 
-    curl http://localhost:3000/Person/9cb1a2bf7f5e321cf8ef0d15
+    curl http://example.com/Person/9cb1a2bf7f5e321cf8ef0d15
 
 To request entities as JSON-LD (still in development!):
 
-    curl -H "Accept: application/ld+json" http://localhost:3000/Person/9cb1a2bf7f5e321cf8ef0d15
+    curl -H "Accept: application/ld+json" http://example.com/Person/9cb1a2bf7f5e321cf8ef0d15
 
 ### Updating
 
 HTTP PUT to /:schemaName/:id
 
-    curl -X PUT -d '{"name": "Jane Smith", "description": "Updated description..."}' -H "Content-Type: application/json" -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" http://localhost:3000/Person/9cb1a2bf7f5e321cf8ef0d15
+    curl -X PUT -d '{"name": "Jane Smith", "description": "Updated description..."}' -H "Content-Type: application/json" -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" http://example.com/Person/9cb1a2bf7f5e321cf8ef0d15
 
 ### Deleting
 
 HTTP DELETE to /:schemaName/:id
 
-    curl -X DELETE -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" http://localhost:3000/Person/9cb1a2bf7f5e321cf8ef0d15
+    curl -X DELETE -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" http://example.com/Person/9cb1a2bf7f5e321cf8ef0d15
 
 ### Searching
 
 HTTP GET to /:schemaName/search
 
-    curl http://localhost:3000/Person/search/?name=John+Smith
+    curl http://example.com/Person/search?name=John+Smith
 
 To request entities as JSON-LD (still in development!):
 
-    curl -H "Accept: application/ld+json" http://localhost:3000/Person/search/?name=John+Smith
+    curl -H "Accept: application/ld+json" http://example.com/Person/search?name=John+Smith
 
 ## Advanced usage
 

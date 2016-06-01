@@ -1,13 +1,13 @@
 <div class="crumbs">
  <a href="/">API</a>
   &gt; <a href="/docs">Documentation</a>
-  &gt; <a href="<%= schemaName %>"><%= schemaName %> API Documentation</a>
+  &gt; <a href="/docs/<%= schemaName %>/schema"><%= schemaName %> API Documentation</a>
 </div>
 <h2><%= schemaName %> API Documentation</h2>
 
 <p>
-  <a href="<%= baseUri %>/docs/<%= schemaName %>"><strong>API Documentation</strong></a> | 
-  <a href="<%= baseUri %>/docs/<%= schemaName %>/schema">Schema</a>
+  <a href="/docs/<%= schemaName %>"><strong>API Documentation</strong></a> | 
+  <a href="/docs/<%= schemaName %>/schema">Schema</a>
 </p>
 
 <p>See the README file for more futher examples, including how to generate API keys.</p>
@@ -65,7 +65,7 @@
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
   <h4>Search</h4>
   <p>Read-only requests do not require an API Key.</p>
-  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /<%= schemaName %>/search/?:params</pre>
+  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /<%= schemaName %>/search?:params</pre>
   <h5 class="mdl-color-text--grey-600">Example</h5>
-  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl <%= baseUri %>/<%= schemaName %>/search/?name=Foo+Bar</pre>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl <%= baseUri %>/<%= schemaName %>/search?name=Foo+Bar</pre>
 </div>
