@@ -48,7 +48,7 @@ app.use(function(req, res, next) {
  * Parse and load schemas as databases models
  */
 var schemaParser = require('./lib/schema-parser');
-schemaParser.collectionName =  process.env.COLLECTION || 'entities';
+schemaParser.collectionName =  process.env.DEFAULT_COLLECTION || 'entities';
 schemaParser.schemaDir = process.env.SCHEMAS || __dirname+"/schemas/";
 
 schemaParser

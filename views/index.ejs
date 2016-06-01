@@ -68,6 +68,8 @@
   "@id": "<%= baseUri %>/Person/574ed54f984b8479174bdb55",
   "@type": "<%= baseUri %>/Person"
 }</pre>
+  <p>You can also request a JSON-LD response:</p>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl -H "Accept: application/ld+json" <%= baseUri %>/Person/9cb1a2bf7f5e321cf8ef0d15</pre>
 </div>
 
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
@@ -114,4 +116,6 @@
   "@id": "<%= baseUri %>/Person/574ed54f984b8479174bdb55",
   "@type": "<%= baseUri %>/Person"
 }]</pre>
+  <p>You can also request a JSON-LD response:</p>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl -H "Accept: application/ld+json" <%= baseUri %>/Person/search?name=Foo+Bar</pre>
 </div>

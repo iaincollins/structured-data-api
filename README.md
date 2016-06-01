@@ -29,7 +29,7 @@ It currently includes example schemas for:
 
 These are currently simple implementations based on properties defined at schema.org.
 
-Note: This is not a Linked Data Platform and does not aim for compliance with LDP but rather provides a practical way to easily manage entities (and could also be used to populate and manage content in a Triplestore). JSON-schema is used to define objects and for validation. Support for exporting objects in JSON-LD is still in development, so you'd need to add hooks to transform the objects yourself if you wanted to do that.
+Note: This is not a Linked Data Platform and does not aim for compliance with LDP but rather provides a practical way to easily manage entities (and could also be used to populate and manage content in a Triplestore). JSON-schema is used to define objects and for validation and it is able to output them as both plain JSON and JSON-LD.
 
 ### Getting started
 
@@ -60,15 +60,15 @@ If you don't have a MongoDB database running locally, or want to specify a remot
 
     MONGODB=mongodb://username:password@server.example.com:27017/db-name npm start
 
-By default all objects are stored in a MongoDB Collection named "*entities*" in a database called "*structured-data*" You can specify a different Collection name using the COLLECTION environment variable.
-   
-    COLLECTION="things" npm start
-   
-Note: Currently there is no option to change either the REST API routes or to store different schema objects in different Collections. Additional flexibility may appear in a future release.
-
 You can specify the base uri to use in all absolute URLS (including IDs for entites and the URLs for schemas) using BASE\_URI environment variable.
 
-  BASE_URI="https://yourserver.example.com"
+    BASE_URI="https://yourserver.example.com"
+
+When requesting JSON-LD resources the default value for @context field is "http://schema.org/" (as that's one of the most common shared defintions) and it assumes your schema is named appropriately (e.g. if you have a schema called "Person" that it follows http://schema.org/Person).
+
+If you are not creating schema that follow schema.org and want to use your own value for @context use the CONTEXT\_URI environment variable.
+
+    CONTEXT_URI="https://yourserver.example.com"
 
 ##### Schemas
 
@@ -190,7 +190,7 @@ HTTP GET to /:schemaName/:id
 
     curl http://example.com/Person/9cb1a2bf7f5e321cf8ef0d15
 
-To request entities as JSON-LD (still in development!):
+To request entities as JSON-LD:
 
     curl -H "Accept: application/ld+json" http://example.com/Person/9cb1a2bf7f5e321cf8ef0d15
 
@@ -212,7 +212,7 @@ HTTP GET to /:schemaName/search
 
     curl http://example.com/Person/search?name=John+Smith
 
-To request entities as JSON-LD (still in development!):
+To request entities as JSON-LD:
 
     curl -H "Accept: application/ld+json" http://example.com/Person/search?name=John+Smith
 
@@ -222,7 +222,7 @@ To request entities as JSON-LD (still in development!):
 
 If a schema is in a sub-directory, the MongoDB name of the collection it will be stored in will be a pluralized form of the schema's parent directory.
 
-If a schema is in the root of the schema directory, then it will be stored in the default collection.
+If a schema is in the root of the schema directory, then it will be stored in the default collection (the default collection name is "entities"; it can be changed using the DEFAULT_COLLECTION environment variable).
 
 e.g.
 
@@ -248,7 +248,7 @@ If you you want to be strict about keeping different entities types in different
 This is a decision you should make carefully before you publish your API as you want to change it later you'd have to migrate items in the database (this application won't do that for you!). If you are not sure it's fine to keep everything in the same collection.
 
 Be sure to update the paths for any local references so they are relative to schema they are in (e.g. '$ref': 'Place.json' -> '$ref': '../Place.json');
-
+    
 ### ObjectID format support
 
 Properties can be defined as referring to ObjectId's. This is not part of the JSON-schema standard, but extends it.
@@ -384,15 +384,6 @@ Use the standard mongodump and mongorestore tools for backups.
 #### Restore from backup
 
     mongorestore --db structured-data dump/structured-data 
-
-## Roadmap
-
-The following features are on the immediate roadmap:
-
-* Output entities formatted as JSON-LD.
-* Web based interface with to manage entities.
-* Web based interface with to manage user accounts / API keys.
-* More powerful free text searching.
 
 ## Contributing
 

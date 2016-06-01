@@ -55,6 +55,24 @@ describe('Person Schema', function() {
     });
   });
   
+  it('should be able to retrieve a person as a JSON-LD object', function(done) {
+    request(app)
+    .get(relativePath)
+    .set('Accept', "application/ld+json")
+    .expect(200)
+    .then(function(res) {
+      if (!res.body['@id'])
+        return done(Error("JSON-LD object should have an @id property"));
+      
+      if (!res.body['@context'])
+        return done(Error("JSON-LD object should have an @context property"));
+
+      if (!res.body['@type'])
+        return done(Error("JSON-LD object should have an @type property"));
+      done();
+    });
+  });
+  
   it('should be able to search for a person by name', function(done) {
     request(app)
     .get('/Person/search?name=John+Smith')
@@ -66,17 +84,27 @@ describe('Person Schema', function() {
     });
   });
 
-  it('should be able to search for a person by type', function(done) {
+  it('should be able to search for a person and return a JSON-LD response', function(done) {
     request(app)
-    .get('/Person/search?type=Person')
+    .get('/Person/search?name=John+Smith')
+    .set('Accept', "application/ld+json")
     .expect(200)
     .then(function(res) {
       if (res.body.length < 1)
-        return done(Error("Should be able to search for a person by type"));
+        return done(Error("Should be able to search for a person by name"));
+
+      if (!res.body[0]['@id'])
+        return done(Error("JSON-LD object should have an @id property"));
+      
+      if (!res.body[0]['@context'])
+        return done(Error("JSON-LD object should have an @context property"));
+
+      if (!res.body[0]['@type'])
+        return done(Error("JSON-LD object should have an @type property"));
       done();
     });
   });
-  
+
   it('should be able to update a person', function(done) {
     person.name = "Jane Smith";
     person.email = "jane.smith@example.com";
