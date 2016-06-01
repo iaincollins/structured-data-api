@@ -1,8 +1,8 @@
 # Structured Data API
 
-This is a simple platform to easily create Search, Create, Retrieve, Update and Delete (SCRUD) methods for managing Structured Data entities.
+This is a simple server to easily create Search, Create, Retrieve, Update and Delete (SCRUD) methods for managing Structured Data entities.
 
-It comes with schemas for People, Places, Organizations, Events and Quotes and is easy to extend just by editing *JSON-schema* files in the `schemas/` directory.
+It comes with schemas for People, Places, Organizations, Events and Quotes and is easy to extend just by editing *JSON-schema* files in the `schemas` directory.
 
 It provides a simple system to generate API keys, with public read access and API keys being required to make changes (i.e. Creating, Updating and Deleting).
 
@@ -64,11 +64,17 @@ By default all objects are stored in a MongoDB Collection named "*entities*" in 
    
 Note: Currently there is no option to change either the REST API routes or to store different schema objects in different Collections. Additional flexibility may appear in a future release.
 
+You can specify the base uri to use in all absolute URLS (including IDs for entites and the URLs for schemas) using BASE\_URI environment variable.
+
+  BASE_URI="https://yourserver.example.com"
+
 ##### Schemas
 
 You can specify a schema dir other that `schemas` using the SCHEMAS environment variable.
 
     SCHEMAS=/usr/local/schemas/ npm start
+    
+For more information about schemas see the "Advanced usage" section.
 
 ##### Admin API key
 
@@ -120,7 +126,7 @@ To get an API Key you can either:
 
 * Set the ADMIN\_API\_KEY environment variable at run time.
 
-    e.g. `ADMIN_API_KEY="ABCD-1234-5789-EFGH" npm start`
+    e.g. `ADMIN_API_KEY="TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" npm start`
 
     This option is useful if you only have one account that needs write access and you are deploying to somewhere like Heroku and don't want to have to SSH in to create a user.
     
@@ -160,56 +166,86 @@ If you want to modify authentication behaviour you can customise the `checkHasRe
 
 ### Retrieve available schemas
 
-HTTP GET to /api/schemas
+HTTP GET to /schemas
 
-    curl http://localhost:3000/api/schemas
+    curl http://localhost:3000/schemas
     
 ### Retrieve a schema
 
-HTTP GET to /api/schemas/:schemaName
+HTTP GET to /:schemaName
 
-    curl http://localhost:3000/api/schema/Person
+    curl http://localhost:3000/Person
 
 ### Creating
 
-HTTP POST to /api
+HTTP POST to /:schemaName
 
-    curl -X POST -d '{"type": "Person", "name": "John Smith", "description": "Description goes here..."}' -H "Content-Type: application/json" -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" http://localhost:3000/api
+    curl -X POST -d '{"name": "John Smith", "description": "Description goes here..."}' -H "Content-Type: application/json" -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" http://localhost:3000/Person
 
 ### Retrieving
 
-HTTP GET to /api/:id
+HTTP GET to /:schemaName/:id
 
-    curl http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
+    curl http://localhost:3000/Person/9cb1a2bf7f5e321cf8ef0d15
 
-To request entities as JSON-LD (still in development):
+To request entities as JSON-LD (still in development!):
 
-    curl -H "Accept: application/ld+json" http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
+    curl -H "Accept: application/ld+json" http://localhost:3000/Person/9cb1a2bf7f5e321cf8ef0d15
 
 ### Updating
 
-HTTP PUT to /api/:id
+HTTP PUT to /:schemaName/:id
 
-    curl -X PUT -d '{"type": "Person", "name": "Jane Smith", "description": "Updated description..."}' -H "Content-Type: application/json" -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
+    curl -X PUT -d '{"name": "Jane Smith", "description": "Updated description..."}' -H "Content-Type: application/json" -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" http://localhost:3000/Person/9cb1a2bf7f5e321cf8ef0d15
 
 ### Deleting
 
-HTTP DELETE to /api/:id
+HTTP DELETE to /:schemaName/:id
 
-    curl -X DELETE -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" http://localhost:3000/api/9cb1a2bf7f5e321cf8ef0d15
+    curl -X DELETE -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" http://localhost:3000/Person/9cb1a2bf7f5e321cf8ef0d15
 
 ### Searching
 
-HTTP GET to /api/search
+HTTP GET to /:schemaName/search
 
-    curl http://localhost:3000/api/search/?name=John+Smith
-    curl http://localhost:3000/api/search/?type=Person
+    curl http://localhost:3000/Person/search/?name=John+Smith
 
-To request entities as JSON-LD (still in development):
+To request entities as JSON-LD (still in development!):
 
-    curl -H "Accept: application/ld+json" http://localhost:3000/api/search/?type=Person
+    curl -H "Accept: application/ld+json" http://localhost:3000/Person/search/?name=John+Smith
 
 ## Advanced usage
+
+### Schemas
+
+If a schema is in a sub-directory, the MongoDB name of the collection it will be stored in will be a pluralized form of the schema's parent directory.
+
+If a schema is in the root of the schema directory, then it will be stored in the default collection.
+
+e.g.
+
+    schemas/Person.json                             collection: 'entities'
+    schemas/Organization.json                       collection: 'entities'
+    schemas/Person/Person.json                      collection: 'people'
+    schemas/Person/Author.json                      collection: 'people'
+    schemas/CreativeWork/Article.json:              collection: 'creativeWorks'
+    schemas/CreativeWork/Report.json:               collection: 'creativeWorks'
+    schemas/CreativeWork/Article/NewsArticle.json:  collection: 'articles'
+ 
+ 
+Note: It will attempt to pluralize English words according to normal grammatical rules.
+
+    e.g.  "book" -> "books"
+          "person" -> "people"
+          "sheep" -> "sheep"
+  
+If you want to be able to search across all your entries in the DB with a single query then you might want to have them all in the same collection (i.e. and not place them in sub-directories).
+
+If you you want to be strict about keeping different entities types in different collections you can place them in sub directories accordingly.
+
+This is a decision you should make carefully before you publish your API as you want to change it later you'd have to migrate items in the database (this application won't do that for you!). If you are not sure it's fine to keep everything in the same collection.
+
+Be sure to update the paths for any local references so they are relative to schema they are in (e.g. '$ref': 'Place.json' -> '$ref': '../Place.json');
 
 ### ObjectID format support
 
@@ -325,14 +361,36 @@ The default behaviour when it detrects circular references in a schema is to tre
 
 You can use the REPLACE\_CIRCULAR\_REF environment variable just like REPLACE\_REF but to impact only schemas with circular references - so you can have schemas with circular references instead require URIs or ObjectIDs for entities they reference, instead of plain objects.
 
+### Data migration
+
+You can add and remove properties from your schema at any time - you just need to restart the server for the changes to take effect.
+
+If you want to edit an existing property (e.g. to rename 'surname' to 'lastName') them you'll need to also update the collection in the database manually.
+
+Example of a MongoDB command to rename a property in all records in the 'entities' collection:
+
+    db.entities.update({}, {$rename:{"surname":"lastName"}}, false, true);
+    
+### Backup / restore
+
+Use the standard mongodump and mongorestore tools for backups.
+
+#### Backup
+
+    mongodump --db structured-data 
+
+#### Restore from backup
+
+    mongorestore --db structured-data dump/structured-data 
+
 ## Roadmap
 
 The following features are on the immediate roadmap:
 
-* JSON-LD support.
-* A web based interface with to manage entities.
-* A web based interface with to manage user accounts / API keys.
-* Add more powerful searching (e.g. free text, based on properties other than name, type and ID, etc).
+* Output entities formatted as JSON-LD.
+* Web based interface with to manage entities.
+* Web based interface with to manage user accounts / API keys.
+* More powerful free text searching.
 
 ## Contributing
 

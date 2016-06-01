@@ -4,7 +4,7 @@ var app = require('../server.js');
 describe('Fetch schemas', function() {
   it('should be able to retrieve a list of schemas', function(done) {
     request(app)
-    .get('/api/schemas')
+    .get('/schemas')
     .expect(200)
     .then(function(res) {
      if (!res.body.schemas)
@@ -15,7 +15,7 @@ describe('Fetch schemas', function() {
   
   it('should be able to retrieve a schema for a Person', function(done) {
     request(app)
-    .get('/api/schema/Person')
+    .get('/Person')
     .expect(200)
     .then(function(res) {
       if (res.body.title != "Person Schema")
@@ -26,7 +26,7 @@ describe('Fetch schemas', function() {
   
   it('should get a 404 response when requesting a schema that doesn\'t exist',  function(done) {
     request(app)
-    .get('/api/schema/SchemaThatDoesNotExist')
+    .get('/SchemaThatDoesNotExist')
     .expect(404)
     .then(function(res) {
       done();

@@ -1,0 +1,13 @@
+<div class="crumbs">
+  <a href="/">API</a>
+  &gt; <a href="docs">Documentation</a>
+</div>
+<h2>Documentation</h2>
+<p>
+  The following schemas are supported by this API.
+</p>
+<ul>
+<% schemas.forEach(function(schema) { %>
+  <li><a href="docs/<%= schema %>"><%= schema %></a></li>
+<% }) %>
+</ul>

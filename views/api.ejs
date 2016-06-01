@@ -1,0 +1,71 @@
+<div class="crumbs">
+ <a href="/">API</a>
+  &gt; <a href="/docs">Documentation</a>
+  &gt; <a href="<%= schemaName %>"><%= schemaName %> API Documentation</a>
+</div>
+<h2><%= schemaName %> API Documentation</h2>
+
+<p>
+  <a href="<%= baseUri %>/docs/<%= schemaName %>"><strong>API Documentation</strong></a> | 
+  <a href="<%= baseUri %>/docs/<%= schemaName %>/schema">Schema</a>
+</p>
+
+<p>See the README file for more futher examples, including how to generate API keys.</p>
+
+<div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
+  <h4>Retrieve schema</h4>
+  <p>Returns JSON-schema.</p>
+  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /<%= schemaName %></pre>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl <%= baseUri %>/<%= schemaName %></pre>
+</div>
+
+<div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
+  <h4>Create</h4>
+  <p>For create requests an API key must be passed via the <strong>x-api-key</strong> header.</p>
+  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP POST /<%= schemaName %></pre>
+  <h5 class="mdl-color-text--grey-600">Example</h5>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl -X POST \
+  -d '{ …JSON object… }' \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" \
+  <%= baseUri %>/<%= schemaName %></pre>
+</div>
+
+<div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
+  <h4>Retrieve</h4>
+  <p>Read-only requests do not require an API Key.</p>
+  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /<%= schemaName %>/:id</pre>
+  <h5 class="mdl-color-text--grey-600">Example</h5>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl <%= baseUri %>/<%= schemaName %>/9cb1a2bf7f5e321cf8ef0d15</pre>
+</div>
+
+<div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
+  <h4>Update</h4>
+  <p>For update requests an API key must be passed via the <strong>x-api-key</strong> header.</p>
+  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP PUT /<%= schemaName %>/:id</pre>
+  <h5 class="mdl-color-text--grey-600">Example</h5>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl -X PUT \
+  -d '{ …JSON object… }' \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" \
+  <%= baseUri %>/<%= schemaName %>/9cb1a2bf7f5e321cf8ef0d15</pre>
+</div>
+
+<div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
+  <h4>Delete</h4>
+  <p>Removes an entry from the database.</p>
+  <p>For delete requests an API key must be passed via the <strong>x-api-key</strong> header.</p>
+  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP DELETE /<%= schemaName %>/:id</pre>
+  <h5 class="mdl-color-text--grey-600">Example</h5>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl -X DELETE \
+  -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" \
+  <%= baseUri %>/<%= schemaName %>/9cb1a2bf7f5e321cf8ef0d15</pre>
+</div>
+
+<div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
+  <h4>Search</h4>
+  <p>Read-only requests do not require an API Key.</p>
+  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /<%= schemaName %>/search/?:params</pre>
+  <h5 class="mdl-color-text--grey-600">Example</h5>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl <%= baseUri %>/<%= schemaName %>/search/?name=Foo+Bar</pre>
+</div>

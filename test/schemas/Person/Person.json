@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Person Schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "image": {
+      "type": "string",
+      "format": "uri"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "birthDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "birthPlace": {
+      "$ref": "../Place/Place.json"
+    },
+    "deathDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "deathPlace": {
+      "$ref": "../Place/Place.json"
+    },
+    "affiliation": {
+      "$ref": "../Organization/Organization.json"
+    },
+    "address": {
+      "oneOf": [
+        { "type": "string" },
+        { "$ref": "../Place/Place.json#/definitions/PostalAddress" }
+      ]
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false
+}

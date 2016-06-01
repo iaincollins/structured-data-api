@@ -2,14 +2,14 @@ var request = require("supertest-as-promised");
 var app = require('../../server.js');
 
 describe('Person Schema', function() {
-  var person = {};
+  var person = {},
+      relativePath = '';
   
   it('should be able to create a person', function(done) {
     request(app)
-    .post('/api')
+    .post('/Person')
     .set('x-api-key', global.user.apiKey)
     .send({ 
-      type: "Person",
       name: "John Smith",
       description: "An example person",
       email: "john.smith@example.com",
@@ -20,13 +20,14 @@ describe('Person Schema', function() {
     .then(function(res) {
       // Save new person for other tests below
       person = res.body;
+      relativePath = res.body['@id'].replace("http://localhost:3000",'');
       
-      if (!person.id)
+      if (!person['@id'])
         return done(Error("A person should have an ID"));
 
-      if (person.type != "Person")
-        return done(Error("A person should be of type 'Person'"));
-
+      if (!person['@type'])
+        return done(Error("A person should have a type"));
+      
       if (person.name != "John Smith")
         return done(Error("Should be able to give a person a name"));
 
@@ -45,10 +46,10 @@ describe('Person Schema', function() {
 
   it('should be able to retrieve a person', function(done) {
     request(app)
-    .get('/api/'+person.id)
+    .get(relativePath)
     .expect(200)
     .then(function(res) {
-      if (!res.body.id)
+      if (!res.body['@id'])
         return done(Error("Should be able to get a person by ID"));
       done();
     });
@@ -56,7 +57,7 @@ describe('Person Schema', function() {
   
   it('should be able to search for a person by name', function(done) {
     request(app)
-    .get('/api/search?name=John+Smith')
+    .get('/Person/search?name=John+Smith')
     .expect(200)
     .then(function(res) {
       if (res.body.length < 1)
@@ -67,7 +68,7 @@ describe('Person Schema', function() {
 
   it('should be able to search for a person by type', function(done) {
     request(app)
-    .get('/api/search?type=Person')
+    .get('/Person/search?type=Person')
     .expect(200)
     .then(function(res) {
       if (res.body.length < 1)
@@ -80,17 +81,17 @@ describe('Person Schema', function() {
     person.name = "Jane Smith";
     person.email = "jane.smith@example.com";
     request(app)
-    .put('/api/'+person.id)
+    .put(relativePath)
     .set('x-api-key', global.user.apiKey)
     .send(person)
     .expect(200)
     .then(function(res) {
       // Look up the person again to see that the changes were saved
       request(app)
-      .get('/api/'+person.id)
+      .get(relativePath)
       .expect(200)
       .then(function(res) {
-        if (res.body.id != person.id)
+        if (res.body['@id'] != person['@id'])
           return done(Error("Should be able to update a person and the ID should not change"));
 
         if (res.body.name != "Jane Smith")
@@ -104,19 +105,17 @@ describe('Person Schema', function() {
   });
   
   it('should be able to delete keys from a person', function(done) {
-    
     delete person.description;
     delete person.email;
-    
     request(app)
-    .put('/api/'+person.id)
+    .put(relativePath)
     .send(person)
     .set('x-api-key', global.user.apiKey)
     .expect(200)
     .then(function(res) {
       // Look up the person again to see that the changes were saved
       request(app)
-      .get('/api/'+person.id)
+      .get(relativePath)
       .expect(200)
       .then(function(res) {
         if (res.body.description)
@@ -131,7 +130,7 @@ describe('Person Schema', function() {
 
   it('should be able to delete a person', function(done) {
     request(app)
-    .delete('/api/'+person.id)
+    .delete(relativePath)
     .set('x-api-key', global.user.apiKey)
     .expect(204)
     .then(function(res) {
@@ -141,10 +140,10 @@ describe('Person Schema', function() {
 
   it('should not be able to retrieve a person that has been deleted', function(done) {
     request(app)
-    .get('/api/'+person.id)
+    .get(relativePath)
     .expect(404)
     .then(function(res) {
-      if (res.body.id)
+      if (res.body['@id'])
         return done(Error("Should not be able to get a person by ID once they have been deleted"));
       done();
     });
@@ -152,7 +151,7 @@ describe('Person Schema', function() {
   
   it('should get 400 malformed error for an invalid object ID', function(done) {
     request(app)
-    .get('/api/abc123')
+    .get('/Person/abc123')
     .expect(400)
     .then(function(res) {
       done();

@@ -1,77 +1,117 @@
-<h1 style="margin-top: 0;">Structured Data API</h1>
+<h1 style="margin-top: 0;"><%= siteName %></h1>
 
-<h2>Schemas</h2>
 <p>
-  The following schemas are supported by the API.
+  The following schemas are supported by this API.
 </p>
 <ul>
 <% schemas.forEach(function(schema) { %>
-  <li><a href="schema/<%= schema %>"><%= schema %></a></li>
+  <li><a href="docs/<%= schema %>"><%= schema %></a></li>
 <% }) %>
 </ul>
 
-<h2>API Documentation</h2>
+<h3>Example API Usage</h3>
 <p>See the README file for futher examples, including how to generate API keys.</p>
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
   <h4>Retrieve available schemas</h4>
   <p>Returns a JSON object with an array of schema names.</p>
-  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /api/schemas</pre>
+  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /schemas</pre>
+  <h5 class="mdl-color-text--grey-600">Example</h5>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl <%= baseUri %>/schemas</pre>
 </div>
 
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
   <h4>Retrieve a schema by name</h4>
   <p>Returns a JSON-schema.</p>
-  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /api/schema/:schemaName</pre>
+  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /:schema</pre>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl <%= baseUri %>/Person</pre>
 </div>
 
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
   <h4>Create an entity</h4>
-  <p>Supply a JSON object matching the schema in the "type" property of the object.</p>
   <p>An API key must be passed via the <strong>x-api-key</strong> header.</p>
-  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP POST /api</pre>
+  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP POST /:schema</pre>
   <h5 class="mdl-color-text--grey-600">Example</h5>
   <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl -X POST \
-  -d '{"type": "Person", "name": "John Smith", "description": "Description of the person"}' \
+  -d '{"name": "John Smith", "description": "Description of the person"}' \
   -H "Content-Type: application/json" \
   -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" \
-  http://your-server.example.com/api</pre>
+  <%= baseUri %>/Person</pre>
+  <h5 class="mdl-color-text--grey-600">Example response</h5>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">{
+  "name": "John Smith",
+  "description": "Description of the person",
+  "@id": "http://localhost:3000/Person/574ed54f984b8479174bdb55",
+  "@type": "http://localhost:3000/Person"
+}</pre>
 </div>
 
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
   <h4>Retrieve an entity</h4>
   <p>Returns a JSON object with an entity matching the ID provided.</p>
   <p>Read-only requests do not require an API Key.</p>
-  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /api/:id</pre>
+  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /:schema/:id</pre>
   <h5 class="mdl-color-text--grey-600">Example</h5>
-  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl http://your-server.example.com/api/9cb1a2bf7f5e321cf8ef0d15</pre>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl <%= baseUri %>/Person/9cb1a2bf7f5e321cf8ef0d15</pre>
+  <h5 class="mdl-color-text--grey-600">Example response</h5>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">{
+  "name": "John Smith",
+  "description": "An example person",
+  "email": "john.smith@example.com",
+  "birthDate": "2000-01-01T00:00:00.000Z",
+  "birthPlace": {
+    "name": "Example Address",
+    "address": {
+      "streetAddress": "123 Fake Street",
+      "addressLocality": "London"
+    }
+  },
+  "@id": "http://localhost:3000/Person/574ed54f984b8479174bdb55",
+  "@type": "http://localhost:3000/Person"
+}</pre>
 </div>
 
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
   <h4>Update an entity</h4>
-  <p>Supply a JSON object matching the schema in the "type" property of the object.</p>
   <p>An API key must be passed via the <strong>x-api-key</strong> header.</p>
-  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP PUT /api/:id</pre>
+  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP PUT /:schema/:id</pre>
   <h5 class="mdl-color-text--grey-600">Example</h5>
   <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl -X PUT \
-  -d '{"type": "Person", "name": "John Smith", "description": "Description of the person"}' \
+  -d '{"name": "John Smith", "description": "Description of the person", "birthDate": "2000-01-01" }' \
   -H "Content-Type: application/json" \
   -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" \
-  http://your-server.example.com/api/9cb1a2bf7f5e321cf8ef0d15</pre>
+  <%= baseUri %>/Person/9cb1a2bf7f5e321cf8ef0d15</pre>
+  <h5 class="mdl-color-text--grey-600">Example response</h5>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">{
+  "name": "John Smith",
+  "description": "Description of the person",
+  "birthDate": "2000-01-01T00:00:00.000Z",
+  "@id": "http://localhost:3000/Person/574ec75f2fc287930d08e593",
+  "@type": "http://localhost:3000/Person"
+}</pre>
 </div>
 
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
   <h4>Delete an entity</h4>
   <p>Removes an entity from the database.</p>
   <p>An API key must be passed via the <strong>x-api-key</strong> header.</p>
-  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP DELETE /api/:id</pre>
+  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP DELETE /:schema/:id</pre>
   <h5 class="mdl-color-text--grey-600">Example</h5>
   <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl -X DELETE \
   -H "x-api-key: TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" \
-  http://your-server.example.com/api/9cb1a2bf7f5e321cf8ef0d15</pre>
+  <%= baseUri %>/Person/9cb1a2bf7f5e321cf8ef0d15</pre>
 </div>
 
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
   <h4>Search entities</h4>
   <p>You can search for entities by name (e.g "?name=John+Smith") or type ("?type=Person")
-  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /api/search/?:params</pre>
+  <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /:schema/search/?:params</pre>
+  <h5 class="mdl-color-text--grey-600">Example</h5>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">curl <%= baseUri %>/Person/search/?name=John+Smith</pre>
+  <h5 class="mdl-color-text--grey-600">Example response</h5>
+  <pre class="mdl-color--grey-800 mdl-color-text--grey-100 mdl-shadow--4dp">[{
+  "name": "John Smith",
+  "description": "Description of the person",
+  "@id": "http://localhost:3000/Person/574ed54f984b8479174bdb55",
+  "@type": "http://localhost:3000/Person"
+}]</pre>
 </div>

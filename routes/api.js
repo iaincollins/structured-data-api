@@ -18,9 +18,9 @@ module.exports = function(schemas) {
   /**
    * Return schema
    */
-  router.get('/schema/:name', checkHasReadAccess, function(req, res, next) {
-    if (schemas.schemas[req.params.name]) {
-      res.status(200).json(schemas.schemas[req.params.name].schema);      
+  router.get('/:model', checkHasReadAccess, function(req, res, next) {
+    if (schemas.schemas[req.params.model]) {
+      res.status(200).json(schemas.schemas[req.params.model].schema);
     } else {
       res.status(404).json({error: 400, message: "Schema not found", requestedUrl: req.originalUrl });
     }
@@ -29,11 +29,14 @@ module.exports = function(schemas) {
   /**
    * Search entities
    */
-  router.get('/search', checkHasReadAccess, function(req, res, next) {
+  router.get('/:model/search', checkHasReadAccess, function(req, res, next) {
+    if (!schemas.schemas[req.params.model])
+      return res.status(404).json({ error: "Entity type not valid" });
+
     var query = {};
 
     if (req.query.type)
-      query._type = req.query.type;
+      query._type = req.params.model;
 
     if (req.query.name)
       query.name = req.query.name;
@@ -42,7 +45,7 @@ module.exports = function(schemas) {
       query.sameAs = req.query.sameAs;
 
     mongoose.connection.db
-    .collection(schemas.collectionName)
+    .collection(schemas.schemas[req.params.model].collectionName)
     .find(query)
     .toArray(function(err, results) {
       if (err) return res.status(500).json({ error: "Unable to search entities" });
@@ -64,17 +67,14 @@ module.exports = function(schemas) {
       });
   
       return res.status(200).json(entities);
-    });    
+    });
   });
 
   /**
    * Create entity
    */
-  router.post('/', checkHasWriteAccess, function(req, res, next) {
-    if (!req.body.type)
-      return res.status(400).json({ error: "Entity type required" });
-
-    var entityType = req.body.type;
+  router.post('/:model', checkHasWriteAccess, function(req, res, next) {
+    var entityType = req.params.model;
 
     if (!schemas.schemas[entityType])
       return res.status(400).json({ error: "Invalid entity type specified" });
@@ -91,7 +91,11 @@ module.exports = function(schemas) {
   /**
    * Get entity
    */
-  router.get('/:id', checkHasReadAccess, function(req, res, next) {
+  router.get('/:model/:id', checkHasReadAccess, function(req, res, next) {
+    
+    if (!schemas.schemas[req.params.model])
+      return res.status(404).json({ error: "Entity type not valid" });
+    
     if (req.params.id === null)
       return res.status(400).json({ error: "Entity ID required" });
 
@@ -99,7 +103,7 @@ module.exports = function(schemas) {
       return res.status(400).json({ error: "Entity ID format invalid" });
 
     mongoose.connection.db
-    .collection(schemas.collectionName)
+    .collection(schemas.schemas[req.params.model].collectionName)
     .findOne({_id: mongoose.Types.ObjectId(req.params.id)}, function(err, entity) {
       if (err) return res.status(500).json({ error: "Unable to fetch entity" });
   
@@ -123,7 +127,10 @@ module.exports = function(schemas) {
   /**
    * Update entity
    */
-  router.put('/:id', checkHasWriteAccess, function(req, res, next) {
+  router.put('/:model/:id', checkHasWriteAccess, function(req, res, next) {
+    if (!schemas.schemas[req.params.model])
+      return res.status(404).json({ error: "Entity type not valid" });
+    
     if (req.params.id === null)
        return res.status(400).json({ error: "Entity ID required" });
 
@@ -131,7 +138,7 @@ module.exports = function(schemas) {
        return res.status(400).json({ error: "Entity ID format invalid" });
 
      mongoose.connection.db
-     .collection(schemas.collectionName)
+     .collection(schemas.schemas[req.params.model].collectionName)
      .findOne({_id: mongoose.Types.ObjectId(req.params.id)}, function(err, entityInDatabase) {
        if (err) return res.status(500).json("Unable to fetch entity");
 
@@ -161,7 +168,7 @@ module.exports = function(schemas) {
          if (err)
            return res.status(500).json({ error: "Unable to save changes to entity", message: err.message || null });
          
-         return res.json(entity);
+         return res.json(model.toJSON());
       });
     });
 
@@ -170,7 +177,10 @@ module.exports = function(schemas) {
   /**
    * Delete entity
    */
-  router.delete('/:id', checkHasWriteAccess, function(req, res, next) {
+  router.delete('/:model/:id', checkHasWriteAccess, function(req, res, next) {
+    if (!schemas.schemas[req.params.model])
+      return res.status(404).json({ error: "Entity type not valid" });
+    
     if (req.params.id === null)
       return res.status(400).json({ error: "Entity ID required" });
 
@@ -178,7 +188,7 @@ module.exports = function(schemas) {
       return res.status(400).json({ error: "Entity ID format invalid" });
 
     mongoose.connection.db
-    .collection(schemas.collectionName)
+    .collection(schemas.schemas[req.params.model].collectionName)
     .remove({_id: mongoose.Types.ObjectId(req.params.id)}, function(err, entity) {
       if (err) return res.status(500).json({ error: "Unable to delete entity" });
 

@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Quotation Schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "image": {
+      "type": "string",
+      "format": "uri"
+    },
+    "description": {
+      "type": "string"
+    },
+    "datePublished": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "spokenByCharacter": {
+      "oneOf": [
+        { "$ref": "../Person/Person.json" },
+        { "$ref": "../Organization/Organization.json" }
+      ]
+    },
+    "text": {
+      "type": "string"
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false
+}

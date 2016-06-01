@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Event Schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "image": {
+      "type": "string",
+      "format": "uri"
+    },
+    "startDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "endDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "location": {
+      "oneOf": [
+        { "$ref": "../Place/Place.json" },
+        { "$ref": "../Place/Place.json#/definitions/PostalAddress" }
+      ]
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false
+}

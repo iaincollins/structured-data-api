@@ -7,6 +7,14 @@ var express = require('express'),
     path = require('path')
     jsonMarkup = require('json-markup');
 
+if (process.env.BASE_URI) {
+  global.baseUri = process.env.BASE_URI.replace(/\/$/, '');
+} else {
+  require('dns').lookup(require('os').hostname(), function(err, ipAddress, fam) {
+    global.baseUri = "http://"+ipAddress+":"+(process.env.PORT || 3000);
+  });
+}
+
 // Handler for DB Connection Errors
 mongoose.connection.on('error', function(err) {
   console.error("MongoDB error", err);
@@ -30,6 +38,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('port', process.env.PORT || 3000);
 
+app.use(function(req, res, next) {
+  res.locals.siteName = process.env.SITE_NAME || "Structured Data API";
+  res.locals.baseUri = global.baseUri;
+  next();
+});
+
 /**
  * Parse and load schemas as databases models
  */
@@ -52,16 +66,16 @@ schemaParser
   });
   
   /**
-   * Return webpage with list of all schemas
+   * Return webpage with list of documentation for all supported schemas
    */
-  app.get('/schemas', function(req, res, next) {
-    res.render('schemas', { schemas: listOfSchemas });
+  app.get('/docs', function(req, res, next) {
+    res.render('docs', { schemas: listOfSchemas });
   });
-
+  
   /**
    * Return webpage with information about a schema
    */
-  app.get('/schema/:name', function(req, res, next) {
+  app.get('/docs/:name/schema', function(req, res, next) {
     if (schemas.schemas[req.params.name]) {
       if (req.headers.accept && req.headers.accept.indexOf('json') > -1) {
         res.status(200).json(schemas.schemas[req.params.name].schema);
@@ -72,13 +86,23 @@ schemaParser
       res.status(404).json({error: 400, message: "Schema not found", requestedUrl: req.originalUrl });
     }
   });
-  
-  
+
+  /**
+   * Return webpage with information about an API for a schema
+   */
+  app.get('/docs/:name', function(req, res, next) {
+    if (schemas.schemas[req.params.name]) {
+      res.render('api', { schemaName: schemas.schemas[req.params.name].model.modelName, schema: jsonMarkup(schemas.schemas[req.params.name].schema) } );
+    } else {
+      res.status(404).json({error: 400, message: "Schema not found", requestedUrl: req.originalUrl });
+    }
+  });
+
   /**
    * Routes for for the API
    */
   var apiRoutes = require('./routes/api');
-  app.use('/api', apiRoutes(schemas));
+  app.use('/', apiRoutes(schemas));
   
   /**
    * 500 Error Handler
@@ -110,8 +134,10 @@ schemaParser
    * Start listening
    * @TODO Check MongoDB is up
    */
-  app.listen(app.get('port'), function() {
-    console.log('Server listening on port %d in %s mode', app.get('port'), app.get('env'));
+  require('dns').lookup(require('os').hostname(), function(err, ipAddress, fam) {
+    app.listen(app.get('port'), function() {
+      console.log('Server running at http://%s:%d in %s mode', ipAddress, app.get('port'), app.get('env'));
+    });
   });
   
 })

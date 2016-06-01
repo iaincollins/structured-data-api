@@ -2,14 +2,14 @@ var request = require("supertest-as-promised");
 var app = require('../../server.js');
 
 describe('Quotation Schema', function() {
-  var quote = {};
+  var quote = {},
+      relativePath = '';
   
   it('should be able to create a quotation', function(done) {
     request(app)
-    .post('/api')
+    .post('/Quotation')
     .set('x-api-key', global.user.apiKey)
     .send({ 
-      type: "Quotation",
       name: "A well known quote",
       text: "You must be the change you wish to see in the world.",
       spokenByCharacter: {
@@ -21,11 +21,13 @@ describe('Quotation Schema', function() {
     .then(function(res) {
       // Save new quote for other tests below
       quote = res.body;
-      if (!quote.id)
+      relativePath = res.body['@id'].replace("http://localhost:3000",'');
+      
+      if (!quote['@id'])
         return done(Error("A quotation should have an ID"));
 
-      if (quote.type != "Quotation")
-        return done(Error("A quotation should be of type 'Quote'"));
+      if (!quote['@type'])
+        return done(Error("A quotation should have a type"));
 
       if (quote.name != "A well known quote")
         return done(Error("Should be able to give a quotation a name"));
@@ -39,10 +41,10 @@ describe('Quotation Schema', function() {
 
   it('should be able to retrieve a quotation', function(done) {
     request(app)
-    .get('/api/'+quote.id)
+    .get(relativePath)
     .expect(200)
     .then(function(res) {
-      if (!res.body.id)
+      if (!res.body['@id'])
         return done(Error("Should be able to get a quotation by ID"));
       done();
     });
@@ -55,13 +57,13 @@ describe('Quotation Schema', function() {
       leiCode: "549300MGWYJ9LR7XYV24"
     };
     request(app)
-    .put('/api/'+quote.id)
+    .put(relativePath)
     .set('x-api-key', global.user.apiKey)
     .send(quote)
     .expect(200)
     .then(function(res) {
       request(app)
-      .get('/api/'+quote.id)
+      .get(relativePath)
       .expect(200)
       .then(function(res) {
         if (res.body.text != "Taste the rainbow")
@@ -76,18 +78,22 @@ describe('Quotation Schema', function() {
   
   
   /**
-   * Skipped as not implemented in the reference schema.
+   * These tests are commented out for now as the test schemas don't implement
+   * them, but left for future reference for later refactoring.
+   * 
+   * Note: They are intentionally commented out and not just mark with .skip
    */
-  it.skip('should be able to use an ObjectID to refer to a Person or Organization', function(done) {
+  /*
+  it('should be able to use an ObjectID to refer to a Person or Organization', function(done) {
     quote.spokenByCharacter = "57348428372a5abaaf3e1f2b";
     request(app)
-    .put('/api/'+quote.id)
+    .put(relativePath)
     .set('x-api-key', global.user.apiKey)
     .send(quote)
     .expect(200)
     .then(function(res) {
       request(app)
-      .get('/api/'+quote.id)
+      .get(relativePath)
       .expect(200)
       .then(function(res) {
         if (res.body.spokenByCharacter != "57348428372a5abaaf3e1f2b")
@@ -97,14 +103,11 @@ describe('Quotation Schema', function() {
       });
     });
   });
-  
-  /**
-   * This is skipped as it is not implemented in the reference schema.
-   */
-  it.skip('should not store an ObjectID for a Person or Organization as a string', function(done) {
+
+  it('should not store an ObjectID for a Person or Organization as a string', function(done) {
     quote.spokenByCharacter = "abc123";
     request(app)
-    .put('/api/'+quote.id)
+    .put(relativePath)
     .set('x-api-key', global.user.apiKey)
     .send(quote)
     .then(function(res) {
@@ -113,7 +116,7 @@ describe('Quotation Schema', function() {
         return done(Error("Should not allow an invalid ObjectID as a reference for a Person or Organization"));
 
       request(app)
-      .get('/api/'+quote.id)
+      .get(relativePath)
       .expect(200)
       .then(function(res) {
         if (res.body.spokenByCharacter == "abc123")
@@ -123,10 +126,11 @@ describe('Quotation Schema', function() {
       });
     });
   });
+  */
   
   it('should be able to delete a quotation', function(done) {
     request(app)
-    .delete('/api/'+quote.id)
+    .delete(relativePath)
     .set('x-api-key', global.user.apiKey)
     .expect(204)
     .then(function(res) {
@@ -136,11 +140,11 @@ describe('Quotation Schema', function() {
 
   it('should not be able to retrieve a quotation that has been deleted', function(done) {
     request(app)
-    .get('/api/'+quote.id)
+    .get(relativePath)
     .expect(404)
     .then(function(res) {
-      if (res.body.id)
-        return done(Error("Should not be able to get a quotation by ID once they have been deleted"));
+      if (res.body['@id'])
+        return done(Error("Should not be able to get a quotation by ID once it has been deleted"));
       done();
     });
   });   

@@ -2,24 +2,26 @@ var request = require("supertest-as-promised");
 var app = require('../../server.js');
 
 describe('Place Schema', function() {
-  var place = {};
+  var place = {},
+      relativePath = '';
   
   it('should be able to create a place', function(done) {
     request(app)
-    .post('/api')
+    .post('/Place')
     .set('x-api-key', global.user.apiKey)
-    .send({ type: "Place", name: "London", description: "An example place"})
+    .send({ name: "London", description: "An example place"})
     .expect(201)
     .then(function(res) {
       // Save new place for other tests below
       place = res.body;
+      relativePath = res.body['@id'].replace("http://localhost:3000",'');
 
-      if (!place.id)
+      if (!place['@id'])
         return done(Error("A place should have an ID"));
 
-      if (place.type != "Place")
-        return done(Error("A place should be of type 'Place'"));
-
+      if (!place['@type'])
+        return done(Error("A place should have a type"));
+      
       if (place.name != "London")
         return done(Error("Should be able to give a place a name"));
       
@@ -32,10 +34,10 @@ describe('Place Schema', function() {
 
   it('should be able to retrieve a place', function(done) {
     request(app)
-    .get('/api/'+place.id)
+    .get(relativePath)
     .expect(200)
     .then(function(res) {
-      if (!res.body.id)
+      if (!res.body['@id'])
         return done(Error("Should be able to get a place by ID"));
       done();
     });
@@ -44,7 +46,7 @@ describe('Place Schema', function() {
   it('should be able to update a place', function(done) {
     place.name = "LONDON, UK";
     request(app)
-    .put('/api/'+place.id)
+    .put(relativePath)
     .set('x-api-key', global.user.apiKey)
     .send(place)
     .expect(200)
@@ -57,7 +59,7 @@ describe('Place Schema', function() {
   
   it('should be able to delete a place', function(done) {
     request(app)
-    .delete('/api/'+place.id)
+    .delete(relativePath)
     .set('x-api-key', global.user.apiKey)
     .expect(204)
     .then(function(res) {
@@ -67,11 +69,11 @@ describe('Place Schema', function() {
 
   it('should not be able to retrieve a place that has been deleted', function(done) {
     request(app)
-    .get('/api/'+place.id)
+    .get(relativePath)
     .expect(404)
     .then(function(res) {
-      if (res.body.id)
-        return done(Error("Should not be able to get a place by ID once they have been deleted"));
+      if (res.body['@id'])
+        return done(Error("Should not be able to get a place by ID once it has been deleted"));
       done();
     });
   });   

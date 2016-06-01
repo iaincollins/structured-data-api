@@ -2,23 +2,24 @@ var request = require("supertest-as-promised");
 var app = require('../../server.js');
 
 describe('Event Schema', function() {
-  var event = {};
+  var event = {},
+      relativePath = '';
 
   it('should be able to create an event', function(done) {
     request(app)
-    .post('/api')
+    .post('/Event')
     .set('x-api-key', global.user.apiKey)
-    .send({ type: "Event", name: "The Big Bang", description: "In the beginning" })
-   .expect(201)
+    .send({ name: "The Big Bang", description: "In the beginning" })
     .then(function(res) {
       // Save new event for other tests below
       event = res.body;
+      relativePath = res.body['@id'].replace("http://localhost:3000",'');
       
-      if (!event.id)
+      if (!event['@id'])
         return done(Error("An event should have an ID"));
 
-      if (event.type != "Event")
-        return done(Error("An event should be of type 'Event'"));
+      if (!event['@type'])
+        return done(Error("An event should have a type"));
 
       if (event.name != "The Big Bang")
         return done(Error("Should be able to give an event a name"));
@@ -32,10 +33,10 @@ describe('Event Schema', function() {
 
   it('should be able to retrieve an event', function(done) {
     request(app)
-    .get('/api/'+event.id)
+    .get(relativePath)
     .expect(200)
     .then(function(res) {
-      if (!res.body.id)
+      if (!res.body['@id'])
         return done(Error("Should be able to get an event by ID"));
       done();
     });
@@ -44,7 +45,7 @@ describe('Event Schema', function() {
   it('should be able to update an event', function(done) {
     event.name = "In the Beginning";
     request(app)
-    .put('/api/'+event.id)
+    .put(relativePath)
     .set('x-api-key', global.user.apiKey)
     .send(event)
     .expect(200)
@@ -57,7 +58,7 @@ describe('Event Schema', function() {
   
   it('should be able to delete an event', function(done) {
     request(app)
-    .delete('/api/'+event.id)
+    .delete(relativePath)
     .set('x-api-key', global.user.apiKey)
     .expect(204)
     .then(function(res) {
@@ -67,13 +68,13 @@ describe('Event Schema', function() {
 
   it('should not be able to retrieve an event that has been deleted', function(done) {
     request(app)
-    .get('/api/'+event.id)
+    .get(relativePath)
     .set('x-api-key', global.user.apiKey)
     .expect(404)
     .then(function(res) {
-      if (res.body.id)
-        return done(Error("Should not be able to get an event by ID once they have been deleted"));
+      if (res.body['@id'])
+        return done(Error("Should not be able to get an event by ID once it has been deleted"));
       done();
     });
-  });   
+  });
 });
