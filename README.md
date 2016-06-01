@@ -1,6 +1,6 @@
 # Structured Data API
 
-[![Build Status](https://travis-ci.org/glitchdigital/stuctured-data-api.svg?branch=master)](https://travis-ci.org/glitchdigital/stuctured-data-api)
+[![Build Status](https://travis-ci.org/glitchdigital/structured-data-api.svg?branch=master)](https://travis-ci.org/glitchdigital/structured-data-api)
 
 This is a simple server to easily create Search, Create, Retrieve, Update and Delete (SCRUD) methods for managing Structured Data entities.
 
