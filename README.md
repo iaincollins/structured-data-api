@@ -82,7 +82,7 @@ For more information about schemas see the "Advanced usage" section.
 
 You can create user accounts to control write access, but if you want to you can also set an Admin API Key at runtime using the ADMIN\_API\_KEY environment variable. This can be useful when deploying on services like Heroku.
 
-    ADMIN_API_KEY="ABCD-1234-5789-EFGH" npm start
+    ADMIN_API_KEY="TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" npm start
 
 #### Deploy to Heroku
 
@@ -92,7 +92,7 @@ If don't have Node.js and MongoDB set up locally and want to deploy it to Heroku
 
 ### Modifying schemas
 
-The files in `schemas/` are in **JSON-schema** format, which read more about at http://JSON-schema.org
+The files in `schemas` are in **JSON-schema** format, which read more about at http://JSON-schema.org
 
 For interoperability with other linked data you might want to refer to the schemas at https://schema.org
 
@@ -237,9 +237,9 @@ e.g.
  
 Note: It will attempt to pluralize English words according to normal grammatical rules.
 
-    e.g.  "book" -> "books"
-          "person" -> "people"
-          "sheep" -> "sheep"
+    e.g.  "book"    -> "books"
+          "person"  -> "people"
+          "sheep"   -> "sheep"
   
 If you want to be able to search across all your entries in the DB with a single query then you might want to have them all in the same collection (i.e. and not place them in sub-directories).
 
