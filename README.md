@@ -14,6 +14,33 @@ The web front end looks like this: https://api.glitch.digital
 
 You are encouraged to fork and adapt this codebase to your own needs!
 
+## Quick start
+
+If you have Node.js and MongoDB already installed all you need to do is download and install it:
+
+    git clone https://github.com/glitchdigital/structured-data-api.git
+    cd structured-data-api
+    npm install
+    npm start
+    
+That's it! Go to http://localhost:3000 in your browser to get started.
+
+Note: To generate an API key, use the add-user script:
+
+    bin/add-user.js -e john.smith@example.com
+
+### Having trouble?
+
+If you don't have Node.js and MongoDB instaled and are running on a Mac, just apinstall ([Homebrew](http://brew.sh) then run this BEFORE the commands above:
+
+    brew install mongodb node
+
+Alternatively, you can use this button to deploy it remotely to Heroku:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/glitchdigital/structured-data-api)
+
+This is the easiest way to get started. You'll probably want to configure some options using enviornment variables if use Heroku. See the section "Deploying to Heroku" for more details.
+
 ## About this platform
 
 This platform uses Node.js, with the Express and Mongoose libraries to allow for rapid application development and quick prototyping for projects that involve structured data.
@@ -92,7 +119,7 @@ You can create user accounts to control write access, but if you want to you can
 
     ADMIN_API_KEY="TZX1T-LZTWM-7BW82-89XQT-8A4M2-YQU48" npm start
 
-#### Deploy to Heroku
+#### Deploying to Heroku
 
 If don't have Node.js and MongoDB set up locally and want to deploy it to Heroku you can use the following link deploy a free instance (it will also setup and connect to a free database with mLab for you too).
 
