@@ -1,0 +1,60 @@
+<div class="crumbs">
+ <a href="/">API</a>
+  &gt; <a href="/admin">Admin</a>
+  &gt; <a href="/admin/search">Search</a>
+</div>
+<div class="mdl-tabs mdl-tabs-vertical">
+  <div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--3-col">
+      <h4>Schemas</h4>
+      <div class="mdl-tabs__tab-bar">
+        <ul>
+          <% schemas.forEach(function(schema, i) { %>
+            <li><a style="text-align: left;" href="/admin/search/?schema=<%= schema %>&amp;q=<%= queryString.q %>" class="mdl-layout__tab <%= ((queryString.schema && queryString.schema == schema) || (!queryString.schema && i == 0)) ? 'is-active' : '' %>"><%= pluralize.plural(schema) %></a></li>
+          <% }) %>
+        </ul>
+      </div>
+    </div>
+    <div class="mdl-cell mdl-cell--9-col">
+    <form id="search-form" action="/admin/search" method="get" style="float: right;">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+         <i class="material-icons">search</i>
+         <div>
+          <input name="schema" type="hidden" value="<%= (queryString.schema) ? queryString.schema : schemas[0] %>"/>
+          <input name="q" class="mdl-textfield__input" type="text" id="search" placeholder="Search" autocomplete="off" value="<%= queryString.q %>"/>
+          <label class="mdl-textfield__label" for="search">Search</label>
+        </div>
+      </div>
+    </form>
+    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width: 100%;">
+      <% if (searchResults.length > 0) { %>
+      <thead>
+        <tr>
+          <th class="mdl-data-table__cell--non-numeric">NAME</th>
+          <th class="mdl-data-table__cell--non-numeric">DESCRIPTION</th>
+          <th class="mdl-data-table__cell">&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% searchResults.forEach(function(result, i) { %>
+        <tr>
+          <td class="mdl-data-table__cell--non-numeric"><%= result.name || '' %></td>
+          <td class="mdl-data-table__cell--non-numeric"><%= result.description || '' %></td>
+          <td class="mdl-data-table__cell">
+            <a href="/admin/view/?uri=<%- encodeURIComponent(result['@id']) %>" class="mdl-button mdl-js-button mdl-button--icon">
+               <i class="material-icons">edit</i>
+            </a>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+      <% } else { %>
+      <thead>
+        <tr>
+          <th style="text-align: center;">No results.</td>
+        </tr>
+      </thead>
+      <% } %>
+    </table>
+  </div>
+</div>

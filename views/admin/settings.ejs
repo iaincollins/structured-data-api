@@ -1,0 +1,44 @@
+<div class="crumbs">
+ <a href="/">API</a>
+  &gt; <a href="/admin">Admin</a>
+  &gt; <a href="/admin/settings">Settings</a>
+</div>
+<h2>Settings</h2>
+<p>View settings that are configured for this server.
+   See the <a href="https://github.com/glitchdigital/structured-data-api/blob/master/README.md">README</a> for more information on the options.
+</p>
+<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width: 100%;">
+  <thead>
+    <tr>
+      <th class="mdl-data-table__cell--non-numeric">Environment Variable</th>
+      <th class="mdl-data-table__cell--non-numeric">Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%
+      settings.forEach(function(setting) {
+        if (!settingsConfigured[setting])
+          return;
+        
+        var value = settingsConfigured[setting];
+        
+        if (setting == "ADMIN_API_KEY" || setting == "MONGODB" || setting == "MONGOLAB_URI")
+          value = "*not displayed*"
+    %>
+    <tr>
+      <td class="mdl-data-table__cell--non-numeric"><%= setting %></td>
+      <td class="mdl-data-table__cell--non-numeric"><%= value %></td>
+    </tr>
+    <% }); %>
+    <%
+      settings.forEach(function(setting) {
+        if (settingsConfigured[setting])
+          return;
+    %>
+    <tr>
+      <td class="mdl-data-table__cell--non-numeric"><%= setting %></td>
+      <td class="mdl-data-table__cell--non-numeric"><span style="opacity: 0.5">Not configured</span></td>
+    </tr>
+    <% }); %>
+  </tbody>
+</table>

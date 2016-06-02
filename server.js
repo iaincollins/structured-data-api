@@ -5,7 +5,9 @@ var express = require('express'),
     ejs = require('ejs'),
     mongoose = require('mongoose'),
     path = require('path')
-    jsonMarkup = require('json-markup');
+    jsonMarkup = require('json-markup'),
+    request = require("supertest-as-promised"),
+    pluralize = require('pluralize');
 
 if (process.env.BASE_URI) {
   global.baseUri = process.env.BASE_URI.replace(/\/$/, '');
@@ -41,6 +43,8 @@ app.set('port', process.env.PORT || 3000);
 app.use(function(req, res, next) {
   res.locals.siteName = process.env.SITE_NAME || "Structured Data API";
   res.locals.baseUri = global.baseUri;
+  res.locals.queryString = req.query;
+  res.locals.pluralize = pluralize;
   next();
 });
 
@@ -57,18 +61,106 @@ schemaParser
   
   var listOfSchemas = [];
   for (var schemaName in schemas.schemas) listOfSchemas.push(schemaName);
-
+  
   /**
    * Homepage
    */
   app.get('/', function(req, res, next) { 
     res.render('index', { schemas: listOfSchemas });
   });
+
+  /**
+   * Admin @TODO Add admin view
+   */
+  app.get('/admin/view', function(req, res, next) {
+    if (req.headers.accept && req.headers.accept.indexOf('json') > -1)
+      return next();
+
+    if (!req.query.uri)
+      return res.redirect('/admin/search');
+
+    var uriAsArray = req.query.uri.split("/");
+
+   if (uriAsArray.length < 3)
+     return next();
+
+    var schema = listOfSchemas[0];
+    if (uriAsArray[uriAsArray.length-2] && schemas.schemas[uriAsArray[uriAsArray.length-2]])
+      schema = uriAsArray[uriAsArray.length-2];
+
+    var id = uriAsArray[uriAsArray.length-1];
+
+    request(app)
+    .get('/'+encodeURIComponent(schema)+'/'+encodeURIComponent(id))
+    .then(function(getResponse) {
+      res.render('admin/view', { schema: schema, jsonSchema: schemas.schemas[schema].schema, entity: getResponse.body, schemas: listOfSchemas });
+    });
+    
+  });
+  
+  /**
+   * Admin @TODO Add admin view
+   */
+  app.get('/admin', function(req, res, next) {
+    if (req.headers.accept && req.headers.accept.indexOf('json') > -1)
+      return next();
+
+    res.redirect('/');
+  });
+
+  /**
+   * Admin - Search
+   */
+  app.get('/admin/search', function(req, res, next) { 
+    if (req.headers.accept && req.headers.accept.indexOf('json') > -1)
+      return next();
+
+    var schema = req.query.schema || listOfSchemas[0];
+    if (!schemas.schemas[schema])
+      return next();
+    
+    request(app)
+    .get('/'+encodeURIComponent(schema)+'/search?q='+encodeURIComponent(req.query.q || ''))
+    .then(function(searchResponse) {
+      res.render('admin/search', { searchResults: searchResponse.body, schemas: listOfSchemas });
+    });
+  });
+  
+  /**
+   * Admin - Settings
+   */
+  /*
+  app.get('/admin/settings', function(req, res, next) {
+    if (req.headers.accept && req.headers.accept.indexOf('json') > -1)
+      return next();
+
+    res.render('admin/settings', {
+      settings: 
+      ['PORT',
+       'NODE_ENV',
+       'MONGODB',
+       'MONGOLAB_URI',
+       'BASE_URI',
+       'CONTEXT_URI',
+       'SITE_NAME',
+       'REPLACE_REF',
+       'REPLACE_CIRCULAR_REF',
+       'DEFAULT_COLLECTION',
+       'SCHEMAS',
+       'ADMIN_API_KEY'
+      ],
+      settingsConfigured: process.env
+    });
+  });
+  */
   
   /**
    * Return webpage with list of documentation for all supported schemas
    */
   app.get('/docs', function(req, res, next) {
+    if (req.headers.accept && req.headers.accept.indexOf('json') > -1)
+      return next();
+      
     res.render('docs', { schemas: listOfSchemas });
   });
   

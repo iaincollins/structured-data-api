@@ -34,15 +34,26 @@ module.exports = function(schemas) {
       return res.status(404).json({ error: "Entity type not valid" });
 
     var query = {};
-
-    if (req.query.type)
-      query._type = req.params.model;
+    var queryOptions = [];
 
     if (req.query.name)
-      query.name = req.query.name;
+      queryOptions.push({ name: {'$regex': req.query.name.trim(), $options: 'i'} });
+
+    if (req.query.description)
+      queryOptions.push({ description: {'$regex': req.query.description.trim(), $options: 'i'} });
+
+    if (req.query.q) {
+      queryOptions.push({ name: {'$regex': req.query.q.trim(), $options: 'i'} });
+      queryOptions.push({ description: {'$regex': req.query.q.trim(), $options: 'i'} });
+    }
 
     if (req.query.sameAs)
-      query.sameAs = req.query.sameAs;
+      queryOptions.push({ sameAs: req.params.sameAs });
+
+    if (queryOptions.length > 0)
+      query = { $or: queryOptions };
+
+    query._type = req.params.model;
 
     mongoose.connection.db
     .collection(schemas.schemas[req.params.model].collectionName)
@@ -259,8 +270,8 @@ module.exports = function(schemas) {
       if (!user)
         return res.status(403).json({ error: "Access denied - API Key invalid" });
 
-      // Account must have "ADMIN"" access to make changes
-      if (user.role != 'ADMIN')
+      // Must be an ADMIN or USER (i.e. not GUEST) to make changes
+      if (user.role != 'ADMIN' || user.role != 'USER')
         return res.status(403).json({ error: "Access denied - Account does not have write access" });
       
       return next();

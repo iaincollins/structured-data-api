@@ -9,9 +9,8 @@
     <title><%= siteName %></title>
     <link rel="shortcut icon" href="/favicon.ico"/>
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700"/>
-    <link rel="stylesheet" href="//code.getmdl.io/1.1.3/material.indigo-blue.min.css" /> 
-    <script defer src="//code.getmdl.io/1.1.3/material.min.js"></script>
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:500"/>
+    <link rel="stylesheet" href="//code.getmdl.io/1.1.3/material.grey-blue.min.css" /> 
     <!--[if lt IE 9]>
       <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -19,8 +18,16 @@
     <style>
       body,
       body p,
-      body li {
-        font-size: 16px;
+      body li,
+      body th,
+      body td {
+        font-size: 15px;
+      }
+
+      body select {
+        font-size: 22px;
+        line-height: 24px;
+        margin-left: 10px;
       }
       
       .main {
@@ -89,10 +96,6 @@
         color: blue;
       }
       
-      .material-icons { 
-        margin-right: 10px;
-      }
-      
       .section {
         padding: 10px;
         margin-bottom: 30px;
@@ -101,14 +104,104 @@
       .section h4 {
         margin-top: 0;
       }
+      
+      .mdl-layout-title {
+        font-weight: 500;
+        text-decoration: none;
+      }
+      
+      .material-icons  {
+        margin-right: 5px;
+      }
+       
+      .mdl-layout-title .material-icons {
+        float: left;
+      }
+      
+      .mdl-layout-title span {
+        line-height: 26px;
+      }
+      
+      .mdl-textfield * {
+        float: left;
+        margin-right: 5px;
+      }
+      
+      .mdl-tabs-vertical .mdl-tabs__tab-bar a {
+        width: 100%;
+        float: left;
+        padding: 0;
+      }
+      
+      .mdl-tabs-vertical  .mdl-tabs__tab-bar {
+        border: none;
+        height: auto;
+      }
+      
+      .mdl-tabs-vertical .mdl-tabs__tab-bar ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+      }
+      @media screen and (max-width: 767px) {
+        .hide-xs {
+          display: none;
+        }
+      }
+      .json-editor h3,
+      .json-editor label {
+        font-weight: bold;
+        text-transform: capitalize;
+        opacity: 0.8;
+      }
+      .json-editor input {
+        padding: 5px 5px;
+        font-size: 15px;
+        line-height: 15px;
+        outline: 0;
+      }
+      .json-editor div[data-schematype="object"] div[data-schematype="object"] {
+        padding-left: 10px;
+        border-left: 4px solid rgba(0,0,0,0.2);
+      }
+      .json-editor div[data-schematype="object"] div[data-schematype="object"] div[data-schematype="object"] {
+        padding: 0;
+        border-left: none;
+      }
+      .json-editor div[data-schematype="object"] div[data-schematype="object"] h3 {
+        font-size: 22px;
+        line-height: 24px;
+        margin: 5px 0;
+      }
     </style>
   </head>
   <body>
    <div class="layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
       <header class="header mdl-layout__header mdl-layout__header--scroll mdl-color--white">
-        <a href="/" class="mdl-layout__header-row mdl-color-text--grey-800" style="float: left;">
-          <i class="material-icons">share</i> <span class="mdl-layout-title" style="font-weight: 500;"><%= siteName %></span>
-        </a>
+         <div class="mdl-layout__header-row mdl-color-text--grey-800">
+          <a href="/" class="mdl-layout-title mdl-color-text--grey-800"><i class="material-icons">share</i><span class="hide-xs"> <%= siteName %></span></a>
+          <div class="mdl-layout-spacer"></div>
+          <a id="search" href="/admin/search" class="mdl-button mdl-js-button mdl-button--icon">
+             <i class="material-icons">search</i>
+          </a>
+          <div class="mdl-tooltip mdl-tooltip--large" for="search">Search</div>
+         <!--
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+             <i class="material-icons">search</i>
+             <form action="/search" method="get">
+              <input class="mdl-textfield__input" type="text" id="search" placeholder="Search"/>
+              <label class="mdl-textfield__label" for="search">Search</label>
+            </form>
+          </div>
+          -->
+          <!--
+          <a id="settings" href="/admin/settings" class="mdl-button mdl-js-button mdl-button--icon" id="hdrbtn">
+             <i class="material-icons">settings</i>
+          </a>
+          <div class="mdl-tooltip mdl-tooltip--large" for="settings">Settings</div>
+          -->
+        </div>
       </header>
       <main class="main mdl-layout__content">
         <div class="container mdl-grid">
@@ -119,5 +212,6 @@
         </div>
       </main>
     </div>
+  <script defer src="//code.getmdl.io/1.1.3/material.min.js"></script>
   </body>
 </html>

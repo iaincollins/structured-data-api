@@ -22,7 +22,7 @@ if (!options.email)
 mongoose.connect( process.env.MONGODB || process.env.MONGOLAB_URI || 'mongodb://localhost/structured-data' );
 
 var user = new User();
-user.role = "ADMIN";
+user.role = "USER";
 user.email = options.email;
 if (options.name) user.name = options.name;
 if (options.organization) user.organization = options.organization;

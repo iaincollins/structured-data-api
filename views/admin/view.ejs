@@ -1,0 +1,36 @@
+<div class="crumbs">
+ <a href="/">API</a>
+  &gt; <a href="/admin">Admin</a>
+  &gt; <a href="/admin/view">View</a>
+</div>
+<div class="mdl-tabs mdl-tabs-vertical">
+  <div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--3-col">
+      <h4>Schemas</h4>
+      <div class="mdl-tabs__tab-bar">
+        <ul>
+          <% schemas.forEach(function(s, i) { %>
+            <li><a style="text-align: left;" href="/admin/search/?schema=<%= s %>" class="mdl-layout__tab <%= (s == schema) ? 'is-active' : '' %>"><%= pluralize.plural(s) %></a></li>
+          <% }) %>
+        </ul>
+      </div>
+    </div>
+    <div class="mdl-cell mdl-cell--9-col">
+      <h6><%= entity['@id'] %></h6>
+      <div id="json-editor" class="json-editor"></div>
+    </div>
+  </div>
+</div>
+<script src="/js/json-editor.js"></script>
+<script>
+  var editor = new JSONEditor(document.getElementById("json-editor"), 
+    {
+      schema: <%- JSON.stringify(jsonSchema) %>,
+      disable_collapse: true,
+      disable_edit_json: true,
+      disable_properties: true,
+      startval: <%- JSON.stringify(entity) %>,
+      theme: 'foundation'
+    }
+  );
+</script>

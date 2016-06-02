@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
 var schema = new mongoose.Schema({
   name: { type: String, default: '' },
   email: { type: String, unique: true, lowercase: true, required: true },
-  role: { type: String, enum: ['ADMIN', 'USER'], default: 'USER' },
+  role: { type: String, enum: ['ADMIN', 'USER', 'GUEST'], default: 'USER' },
   apiKey: { type: String, unique: true },
   created: { type: Date, default: Date.now }
 });

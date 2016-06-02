@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "title": "Quotation Schema",
+  "title": "Quotation",
   "type": "object",
   "properties": {
     "name": {

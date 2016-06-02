@@ -261,7 +261,7 @@ To request entities as JSON-LD:
 
 If a schema is in a sub-directory, the MongoDB name of the collection it will be stored in will be a pluralized form of the schema's parent directory.
 
-If a schema is in the root of the schema directory, then it will be stored in the default collection (the default collection name is "entities"; it can be changed using the DEFAULT_COLLECTION environment variable).
+If a schema is in the root of the schema directory, then it will be stored in the default collection (the default collection name is "entities"; it can be changed using the DEFAULT\_COLLECTION environment variable).
 
 e.g.
 

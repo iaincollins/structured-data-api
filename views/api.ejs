@@ -20,7 +20,7 @@
 </div>
 
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
-  <h4>Create</h4>
+  <h4>Create <%= schemaName.toLowerCase() %></h4>
   <p>For create requests an API key must be passed via the <strong>x-api-key</strong> header.</p>
   <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP POST /<%= schemaName %></pre>
   <h5 class="mdl-color-text--grey-600">Example</h5>
@@ -32,7 +32,7 @@
 </div>
 
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
-  <h4>Retrieve</h4>
+  <h4>Retrieve <%= schemaName.toLowerCase() %></h4>
   <p>Read-only requests do not require an API Key.</p>
   <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /<%= schemaName %>/:id</pre>
   <h5 class="mdl-color-text--grey-600">Example</h5>
@@ -42,7 +42,7 @@
 </div>
 
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
-  <h4>Update</h4>
+  <h4>Update <%= schemaName.toLowerCase() %></h4>
   <p>For update requests an API key must be passed via the <strong>x-api-key</strong> header.</p>
   <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP PUT /<%= schemaName %>/:id</pre>
   <h5 class="mdl-color-text--grey-600">Example</h5>
@@ -54,7 +54,7 @@
 </div>
 
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
-  <h4>Delete</h4>
+  <h4>Delete <%= schemaName.toLowerCase() %></h4>
   <p>Removes an entry from the database.</p>
   <p>For delete requests an API key must be passed via the <strong>x-api-key</strong> header.</p>
   <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP DELETE /<%= schemaName %>/:id</pre>
@@ -65,7 +65,7 @@
 </div>
 
 <div class="section mdl-color--white mdl-color-text--grey-700 mdl-shadow--4dp">
-  <h4>Search</h4>
+  <h4>Search for <%= schemaName.toLowerCase() %></h4>
   <p>Read-only requests do not require an API Key.</p>
   <pre class="mdl-color--grey-900 mdl-color-text--grey-100 mdl-shadow--4dp">HTTP GET /<%= schemaName %>/search?:params</pre>
   <h5 class="mdl-color-text--grey-600">Example</h5>
