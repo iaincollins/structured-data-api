@@ -16,7 +16,7 @@ before(function(done) {
    */
   User.findOneAndRemove({ email: "api-key-test@example.com" }, function(err) {
     var user = new User({ email: "api-key-test@example.com" });
-    user.role = "ADMIN";
+    user.role = "USER";
     user.save(function(err) {
       if (err)
         return done(new Error(err));

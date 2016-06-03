@@ -271,7 +271,7 @@ module.exports = function(schemas) {
         return res.status(403).json({ error: "Access denied - API Key invalid" });
 
       // Must be an ADMIN or USER (i.e. not GUEST) to make changes
-      if (user.role != 'ADMIN' || user.role != 'USER')
+      if (user.role != 'ADMIN' && user.role != 'USER')
         return res.status(403).json({ error: "Access denied - Account does not have write access" });
       
       return next();

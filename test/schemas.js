@@ -18,7 +18,7 @@ describe('Fetch schemas', function() {
     .get('/Person')
     .expect(200)
     .then(function(res) {
-      if (res.body.title != "Person Schema")
+      if (res.body.title != "Person")
         return done(Error("Should be able to fetch a schema for a person"));
       done();
     });
