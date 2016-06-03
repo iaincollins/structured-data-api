@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "title": "Quotation Schema",
+  "title": "Quotation",
   "type": "object",
   "properties": {
     "name": {
@@ -16,9 +16,6 @@
     "image": {
       "type": "string",
       "format": "uri"
-    },
-    "description": {
-      "type": "string"
     },
     "datePublished": {
       "type": "string",

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "title": "NewsArticle Schema",
+  "title": "NewsArticle",
   "type": "object",
   "properties": {
     "name": {

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "title": "Place Schema",
+  "title": "Place",
   "type": "object",
   "properties": {
     "name": {
@@ -24,14 +24,14 @@
       "type": "object",
       "anyOf": [
         {
-          "elevation": { "type": "number "},
-          "latitude": { "type": "number "},
-          "longitude": { "type": "number "} 
+          "elevation": { "type": "number"},
+          "latitude": { "type": "number"},
+          "longitude": { "type": "number"} 
         }, {
-          "box": { "type": "string "},
-          "circle": { "type": "string "},
-          "line": { "type": "string "},
-          "polygon": { "type": "string "}
+          "box": { "type": "string"},
+          "circle": { "type": "string"},
+          "line": { "type": "string"},
+          "polygon": { "type": "string"}
         }
       ]
     }

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "title": "Organization Schema",
+  "title": "Organization",
   "type": "object",
   "properties": {
     "name": {
