@@ -247,9 +247,13 @@ HTTP DELETE to /:schemaName/:id
 
 ### Searching
 
+You can search against values in the 'name' and 'description' fields and specify one or both options as query paramaters.
+
+You can also use 'q' to search both - in future this option may also support searching across other fields.
+
 HTTP GET to /:schemaName/search
 
-    curl http://example.com/Person/search?name=John+Smith
+    curl http://example.com/Person/search?q=John+Smith
 
 To request entities as JSON-LD:
 

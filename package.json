@@ -1,6 +1,6 @@
 {
   "name": "structured-data-api",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "A platform for working with Structured Data",
   "main": "server.js",
   "scripts": {
