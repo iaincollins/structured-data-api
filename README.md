@@ -31,7 +31,7 @@ Note: To generate an API key, use the add-user script:
 
 ### Having trouble?
 
-If you don't have Node.js and MongoDB instaled and are running on a Mac, just apinstall ([Homebrew](http://brew.sh) then run this BEFORE the commands above:
+If you don't have Node.js and MongoDB instaled and are running on a Mac, just install ([Homebrew](http://brew.sh) then run this BEFORE running the commands above:
 
     brew install mongodb node
 
@@ -39,7 +39,7 @@ Alternatively, you can use this button to deploy it remotely to Heroku:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/glitchdigital/structured-data-api)
 
-This is the easiest way to get started. You'll probably want to configure some options using enviornment variables if use Heroku. See the section "Deploying to Heroku" for more details.
+This is the easiest way to get started. You'll probably want to configure some options using environment variables if use Heroku. See the section "Deploying to Heroku" for more details.
 
 ## About this platform
 
@@ -71,7 +71,7 @@ Once downloaded, install and run with:
     npm install
     npm start
 
-The server willl then be running at `http://example.com`. Please note there is no web based user inteface yet, just a RESTful API!
+The server will then be running at `http://example.com`. Please note there is no web based user interface yet, just a RESTful API!
 
 #### Testing
 
@@ -95,11 +95,11 @@ If you want your site to display your own name instead of "Structured Data API" 
 
     SITE_NAME="Acme Inc." npm start
 
-You can specify the base uri to use in all absolute URLS (including IDs for entites and the URLs for schemas) using BASE\_URI environment variable. It is strongly recommended you eplicitly set this as auto-dection does not always work well mwhen behind a load balancer or proxy (e.g. Heroku).
+You can specify the base uri to use in all absolute URLS (including IDs for entities and the URLs for schemas) using BASE\_URI environment variable. It is strongly recommended you explicitly set this as auto-detection does not always work well when behind a load balancer or proxy (e.g. Heroku).
 
     BASE_URI="https://yourserver.example.com" npm start
 
-When requesting JSON-LD resources the default value for @context field is "http://schema.org/" (as that's one of the most common shared defintions) and it assumes your schema is named appropriately (e.g. if you have a schema called "Person" that it follows http://schema.org/Person).
+When requesting JSON-LD resources the default value for @context field is "http://schema.org/" (as that's one of the most common shared definitions) and it assumes your schema is named appropriately (e.g. if you have a schema called "Person" that it follows http://schema.org/Person).
 
 If you are not creating schema that follow schema.org and want to use your own value for @context use the CONTEXT\_URI environment variable.
 
@@ -348,7 +348,7 @@ By fragment:
 
 ### Customing reference handling
 
-Instead of automatically seralizing references by including referenced schemas you can set the environment variable REPLACE\_REF to change the default behaviour.
+Instead of automatically serializing references by including referenced schemas you can set the environment variable REPLACE\_REF to change the default behaviour.
 
 You can use it o replace $ref values in schemas with other types - either an "object", a "uri" or a database "objectid".
 
@@ -396,13 +396,13 @@ Using `REPLACE_REF="objectid" npm start` would do this:
       description: "The ObjectID of an object in the database matching the schema http://example.com/place.json"
     }
 
-Note that setting REPLACE\_REF impacts ALL references in ALL schemas (execept circular references - see the section "Circular references" below).
+Note that setting REPLACE\_REF impacts ALL references in ALL schemas (except circular references - see the section "Circular references" below).
 
 ### Circular references
 
 The the validator can't currently handle schemas with circular references.
 
-The default behaviour when it detrects circular references in a schema is to treat the properties that reference other schemas in that schema to plain objects and to skip validation of those properties (i.e. allow any object).
+The default behaviour when it detects circular references in a schema is to treat the properties that reference other schemas in that schema to plain objects and to skip validation of those properties (i.e. allow any object).
 
 You can use the REPLACE\_CIRCULAR\_REF environment variable just like REPLACE\_REF but to impact only schemas with circular references - so you can have schemas with circular references instead require URIs or ObjectIDs for entities they reference, instead of plain objects.
 
@@ -418,7 +418,7 @@ Example of a MongoDB command to rename a property in all records in the 'entitie
     
 ### Backup / restore
 
-Use the standard mongodump and mongorestore tools for backups.
+You can use the standard `mongodump` and `mongorestore` commands for backups.
 
 #### Backup
 
