@@ -143,6 +143,7 @@ schemaParser
 })
 .catch(function(err) {
   console.error("Unable to start server as failed to load schemas: ",err);
+  process.exit(0);
 });
 
 module.exports = app;
