@@ -40,6 +40,7 @@ app.set('port', process.env.PORT || 3000);
 
 app.use(function(req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", process.env.ALLOW_ORIGIN || "*");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-Api-Key");
   res.setHeader("Access-Control-Allow-Methods", "INFO, GET, PUT, POST, DELETE, HEAD");
   res.locals.siteName = process.env.SITE_NAME || "Structured Data API";
   res.locals.baseUri = global.baseUri;
