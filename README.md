@@ -85,25 +85,39 @@ You can check everything is working with `npm test`.
 
 Note: See also "Advanced usage" for additional options.
 
-##### Database 
+##### MONGODB
 
 If you don't have a MongoDB database running locally, or want to specify a remote server or an alternative database name you can passing a connection string as an environment variable before calling `npm start` or `npm test`.
 
     MONGODB=mongodb://username:password@server.example.com:27017/db-name npm start
     
+##### SITE\_NAME
+
 If you want your site to display your own name instead of "Structured Data API" but don't want to have to edit the templates, you can use the SITE\_NAME environment variable.
 
     SITE_NAME="Acme Inc." npm start
 
+##### BASE\_URI
+
 You can specify the base uri to use in all absolute URLS (including IDs for entities and the URLs for schemas) using BASE\_URI environment variable. It is strongly recommended you explicitly set this as auto-detection does not always work well when behind a load balancer or proxy (e.g. Heroku).
 
     BASE_URI="https://yourserver.example.com" npm start
+
+##### CONTEXT\_URI
 
 When requesting JSON-LD resources the default value for @context field is "http://schema.org/" (as that's one of the most common shared definitions) and it assumes your schema is named appropriately (e.g. if you have a schema called "Person" that it follows http://schema.org/Person).
 
 If you are not creating schema that follow schema.org and want to use your own value for @context use the CONTEXT\_URI environment variable.
 
     CONTEXT_URI="https://yourserver.example.com" npm start
+
+##### ALLOW\_ORIGIN
+
+By default the "Access-Control-Allow-Origin" HTTP header is set to "*" to allow API requests from a browser at any domain. If you want to restrict this to only allow in-browser requests to a specific website you can use the ALLOW\_ORIGIN environment variable.
+
+    ALLOW_ORIGIN="https://www.example.com" npm start
+
+The "Access-Control-Allow-Methods" HTTP header is set automatically.
 
 ##### Schemas
 
