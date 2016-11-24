@@ -31,6 +31,12 @@
     },
     "citation": {
       "type": "string"
+    },
+    "upvoteCount": {
+      "type": "integer"
+    },
+    "downvoteCount": {
+      "type": "integer"
     }
   },
   "required": ["text"],
