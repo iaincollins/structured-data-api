@@ -6,6 +6,12 @@
     "name": {
       "type": "string"
     },
+    "alternateName": {
+      "type": "array",
+      "items": {
+        "type": "string"
+     }
+    },
     "text": {
       "type": "string"
     },
