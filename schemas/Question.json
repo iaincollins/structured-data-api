@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "title": "Article",
+  "title": "Question",
   "type": "object",
   "properties": {
     "name": {
       "type": "string"
     },
-    "description": {
+    "text": {
       "type": "string"
     },
     "url": {
@@ -21,34 +21,32 @@
       "type": "string",
       "format": "date-time"
     },
-    "datePublished": {
-      "type": "string",
-      "format": "date-time"
-    },
     "dateModified": {
       "type": "string",
       "format": "date-time"
     },
-    "articleBody": {
-      "type": "string"
+    "datePublished": {
+      "type": "string",
+      "format": "date-time"
     },
-    "articleSection": {
-      "type": "string"
+    "acceptedAnswer": {
+      "$ref": "Answer.json"
+    },
+    "mainEntity": {
+      "$ref": "Thing.json"
+    },
+    "mentions": {
+      "type": "array",
+      "items": {
+        "$ref": "Thing.json"
+     }
     },
     "keywords": {
       "type": "string"
     },
-    "wordCount": {
-      "type": "integer"
-    },
-    "author": {
-      "oneOf": [
-        { "$ref": "Person.json" },
-        { "$ref": "Organization.json" }
-      ]
-    },
-    "publisher": {
-      "$ref": "Organization.json"
+    "temporalCoverage": {
+      "type": "string",
+      "format": "date-time"
     }
   },
   "required": ["name"],
