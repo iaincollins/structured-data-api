@@ -39,6 +39,5 @@
       "type": "integer"
     }
   },
-  "required": ["text"],
   "additionalProperties": false
 }
