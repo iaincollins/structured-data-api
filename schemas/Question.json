@@ -1,0 +1,173 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Question",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "alternateName": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "text": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "image": {
+      "type": "string",
+      "format": "uri"
+    },
+    "dateCreated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "dateModified": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "datePublished": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "acceptedAnswer": {
+      "$schema": "http://json-schema.org/schema#",
+      "title": "Answer",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "image": {
+          "type": "string",
+          "format": "uri"
+        },
+        "dateCreated": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "dateModified": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "datePublished": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "citation": {
+          "type": "string"
+        },
+        "upvoteCount": {
+          "type": "integer"
+        },
+        "downvoteCount": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false
+    },
+    "mainEntity": {
+      "$schema": "http://json-schema.org/schema#",
+      "title": "Thing",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "disambiguatingDescription": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "image": {
+          "type": "string",
+          "format": "uri"
+        },
+        "dateCreated": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "dateModified": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sameAs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "mentions": {
+      "type": "array",
+      "items": {
+        "$schema": "http://json-schema.org/schema#",
+        "title": "Thing",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "disambiguatingDescription": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "image": {
+            "type": "string",
+            "format": "uri"
+          },
+          "dateCreated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sameAs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "keywords": {
+      "type": "string"
+    },
+    "temporalCoverage": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}
