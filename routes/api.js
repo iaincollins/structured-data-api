@@ -19,92 +19,52 @@ module.exports = function(schemas) {
    * Return schema
    */
   router.get('/:model', checkHasReadAccess, function(req, res, next) {
-    if (!schemas.schemas[req.params.model])
-      return res.status(404).json({error: 400, message: "Schema not found", requestedUrl: req.originalUrl });
-
-    if (Object.keys(req.query).length == 0) {
+    if (schemas.schemas[req.params.model]) {
       res.status(200).json(schemas.schemas[req.params.model].schema);
     } else {
-      search(req, res, next);
+      res.status(404).json({error: 400, message: "Schema not found", requestedUrl: req.originalUrl });
     }
   });
-
+  
   /**
    * Search entities
-   * 
-   * @deprecated As per JSON API spec pass query params to a model to search
    */
   router.get('/:model/search', checkHasReadAccess, function(req, res, next) {
-    search(req, res, next);
-  });
-  
-  function search(req, res, next) {
     if (!schemas.schemas[req.params.model])
       return res.status(404).json({ error: "Entity type not valid" });
 
     var query = {};
-    var queryOptions = [ ];
+    var queryOptions = [];
 
-    Object.keys(req.query).forEach(function(keyName) {
-      // "sort" is a reserved keyname for sorting parameters
-      // (can be worked around by passing something like '_sort' to search
-      // for a keyname that is actualy 'sort' )
-      if (keyName == "sort")
-        return;
-      
-      // Only allow A-z 0-9 _ and - in key names
-      var escapedKeyName = keyName.replace(/[^A-z0-9_-]/ , '');
-      if (escapedKeyName == '')
-        return;
-      
-      // @TODO Always does a case insensitive search should be configurable
-      
-      var queryOption = { _type: req.params.model };
-      queryOption[escapedKeyName] = { '$regex': req.query[escapedKeyName].trim(), $options: 'i' };
-      queryOptions.push(queryOption);
-    });
+    if (req.query.name)
+      queryOptions.push({ name: {'$regex': req.query.name.trim(), $options: 'i'} });
 
-    if (queryOptions.length == 0) {
-      // If no query options, just return all objects of the appropriate type
-      query = { _type: req.params.model };
-    } else {
-      // If multiple query options, return all results that match any queries
+    if (req.query.description)
+      queryOptions.push({ description: {'$regex': req.query.description.trim(), $options: 'i'} });
+
+    if (req.query.q) {
+      queryOptions.push({ name: {'$regex': req.query.q.trim(), $options: 'i'} });
+      queryOptions.push({ description: {'$regex': req.query.q.trim(), $options: 'i'} });
+    }
+
+    if (req.query.sameAs)
+      queryOptions.push({ sameAs: req.params.sameAs });
+
+    if (queryOptions.length > 0)
       query = { $or: queryOptions };
-    }
 
-    var search = mongoose.connection.db
+    query._type = req.params.model;
+
+    mongoose.connection.db
     .collection(schemas.schemas[req.params.model].collectionName)
-    .find(query);
-    
-    // Add sort option to query
-    if (req.query.sort) {
-      var sortOptions = {};
-      req.query.sort.split(",").forEach(function(sortOption) {
-
-        // Add '-' to a sort option to reverse sort order (see JSON API specs)
-        // e.g. ?sort=date or ?sort=-date
-        var sortOrder = (sortOption.match(/^-/)) ? -1 : 1;
-        sortOption = sortOption.replace(/^-/, '');
-        
-        // Only allow A-z 0-9 _ and - in key names
-        var escapedSortOption = sortOption.replace(/[^A-z0-9_-]/ , '');
-        if (escapedSortOption == '')
-          return;
-        
-        sortOptions[escapedSortOption] = sortOrder;
-
-      });
-      search.sort(sortOptions);
-    }
-    
-    search.toArray(function(err, results) {
+    .find(query)
+    .toArray(function(err, results) {
       if (err) return res.status(500).json({ error: "Unable to search entities" });
   
       // For each result, format it using the appropriate Entity model
       var entities = [];
       results.forEach(function(entity) {
-        
-        // Skip entries that use a schema that isn't defined
+        // Skip schemas that use a schema that isn't defined
         if (!schemas.schemas[entity._type])
           return;
 
@@ -119,7 +79,7 @@ module.exports = function(schemas) {
   
       return res.status(200).json(entities);
     });
-  }
+  });
 
   /**
    * Create entity

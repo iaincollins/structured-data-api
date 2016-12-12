@@ -75,7 +75,7 @@ describe('Person Schema', function() {
   
   it('should be able to search for a person by name', function(done) {
     request(app)
-    .get('/Person?name=John')
+    .get('/Person/search?q=John')
     .expect(200)
     .then(function(res) {
       if (res.body.length < 1)
@@ -86,7 +86,7 @@ describe('Person Schema', function() {
 
   it('should be able to search for a person and return a JSON-LD response', function(done) {
     request(app)
-    .get('/Person?name=John')
+    .get('/Person/search?q=John')
     .set('Accept', "application/ld+json")
     .expect(200)
     .then(function(res) {
