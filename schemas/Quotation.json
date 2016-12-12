@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "title": "Answer",
+  "title": "Quotation",
   "type": "object",
   "properties": {
     "name": {
       "type": "string"
     },
-    "text": {
+    "description": {
       "type": "string"
     },
     "url": {
@@ -17,27 +17,20 @@
       "type": "string",
       "format": "uri"
     },
-    "dateCreated": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "dateModified": {
-      "type": "string",
-      "format": "date-time"
-    },
     "datePublished": {
       "type": "string",
       "format": "date-time"
     },
-    "citation": {
+    "spokenByCharacter": {
+      "oneOf": [
+        { "$ref": "Person.json" },
+        { "$ref": "Organization.json" }
+      ]
+    },
+    "text": {
       "type": "string"
-    },
-    "upvoteCount": {
-      "type": "integer"
-    },
-    "downvoteCount": {
-      "type": "integer"
     }
   },
+  "required": ["name"],
   "additionalProperties": false
 }

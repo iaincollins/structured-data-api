@@ -1,18 +1,12 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "title": "Question",
+  "title": "NewsArticle",
   "type": "object",
   "properties": {
     "name": {
       "type": "string"
     },
-    "alternateName": {
-      "type": "array",
-      "items": {
-        "type": "string"
-     }
-    },
-    "text": {
+    "description": {
       "type": "string"
     },
     "url": {
@@ -27,33 +21,36 @@
       "type": "string",
       "format": "date-time"
     },
-    "dateModified": {
-      "type": "string",
-      "format": "date-time"
-    },
     "datePublished": {
       "type": "string",
       "format": "date-time"
     },
-    "acceptedAnswer": {
-      "$ref": "Answer.json"
+    "dateModified": {
+      "type": "string",
+      "format": "date-time"
     },
-    "mainEntity": {
-      "$ref": "Thing.json"
+    "articleBody": {
+      "type": "string"
     },
-    "mentions": {
-      "type": "array",
-      "items": {
-        "$ref": "Thing.json"
-     }
+    "articleSection": {
+      "type": "string"
     },
     "keywords": {
       "type": "string"
     },
-    "temporalCoverage": {
-      "type": "string",
-      "format": "date-time"
+    "wordCount": {
+      "type": "integer"
+    },
+    "author": {
+      "oneOf": [
+        { "$ref": "Person.json" },
+        { "$ref": "Organization.json" }
+      ]
+    },
+    "publisher": {
+      "$ref": "Organization.json"
     }
   },
+  "required": ["name"],
   "additionalProperties": false
 }

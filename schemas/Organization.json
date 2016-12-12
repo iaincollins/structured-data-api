@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Organization Schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "image": {
+      "type": "string",
+      "format": "uri"
+    },
+    "foundingDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "address": {
+      "oneOf": [
+        { "type": "string" },
+        { "$ref": "Place.json#/definitions/PostalAddress" }
+      ]
+    },
+    "leiCode": {
+      "type": "string"
+    },
+    "numberOfEmployees": {
+      "type": "integer"
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false
+}

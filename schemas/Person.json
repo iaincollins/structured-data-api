@@ -1,15 +1,12 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "title": "Thing",
+  "title": "Person",
   "type": "object",
   "properties": {
     "name": {
       "type": "string"
     },
     "description": {
-      "type": "string"
-    },
-    "disambiguatingDescription": {
       "type": "string"
     },
     "url": {
@@ -20,21 +17,34 @@
       "type": "string",
       "format": "uri"
     },
-    "dateCreated": {
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "birthDate": {
       "type": "string",
       "format": "date-time"
     },
-    "dateModified": {
+    "birthPlace": {
+      "$ref": "Place.json"
+    },
+    "deathDate": {
       "type": "string",
       "format": "date-time"
     },
-    "sameAs": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "format": "uri"
-     }
+    "deathPlace": {
+      "$ref": "Place.json"
+    },
+    "affiliation": {
+      "$ref": "Organization.json"
+    },
+    "address": {
+      "oneOf": [
+        { "type": "string" },
+        { "$ref": "Place.json#/definitions/PostalAddress" }
+      ]
     }
   },
+  "required": ["name"],
   "additionalProperties": false
 }
