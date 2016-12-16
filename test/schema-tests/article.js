@@ -14,7 +14,6 @@ describe('Article Schema', function() {
       // Save new article for other tests below
       article = res.body;
       relativePath = res.body['@id'].replace("http://localhost:3000",'');
-  
       if (!article['@id'])
         return done(Error("An article should have an ID"));
 

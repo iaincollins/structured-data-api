@@ -1,6 +1,10 @@
 var request = require("supertest-as-promised");
 var app = require('../../server.js');
 
+/**
+ * This test suite has more tests than the ones for other schemas as it tests
+ * extended features such as as searching, validation & JSON-LD output.
+ */
 describe('Person Schema', function() {
   var person = {},
       relativePath = '';
@@ -21,7 +25,6 @@ describe('Person Schema', function() {
       // Save new person for other tests below
       person = res.body;
       relativePath = res.body['@id'].replace("http://localhost:3000",'');
-      
       if (!person['@id'])
         return done(Error("A person should have an ID"));
 
@@ -51,6 +54,13 @@ describe('Person Schema', function() {
     .then(function(res) {
       if (!res.body['@id'])
         return done(Error("Should be able to get a person by ID"));
+      
+      if (!res.body['@dateCreated'])
+        return done(Error("JSON object should have a @dateCreated property"));
+
+      if (!res.body['@dateModified'])
+        return done(Error("JSON object should have a @dateModified property"));
+
       done();
     });
   });
@@ -69,6 +79,12 @@ describe('Person Schema', function() {
 
       if (!res.body['@type'])
         return done(Error("JSON-LD object should have an @type property"));
+
+      if (res.body['@dateCreated'])
+        return done(Error("JSON-LD object should not have a @dateCreated property"));
+
+      if (res.body['@dateModified'])
+        return done(Error("JSON-LD object should not have a @dateModified property"));
       done();
     });
   });
@@ -78,6 +94,7 @@ describe('Person Schema', function() {
     .get('/Person?name=John')
     .expect(200)
     .then(function(res) {
+
       if (res.body.length < 1)
         return done(Error("Should be able to search for a person by name"));
       done();
