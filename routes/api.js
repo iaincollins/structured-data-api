@@ -46,10 +46,11 @@ module.exports = function(schemas) {
     var queryOptions = [ ];
 
     Object.keys(req.query).forEach(function(keyName) {
-      // "sort" is a reserved keyname for sorting parameters
-      // (can be worked around by passing something like '_sort' to search
-      // for a keyname that is actualy 'sort' )
-      if (keyName == "sort")
+      // Ignore reserved keyname for sorting and limit parameters.
+      // Note: If you have a field namd "sort" or "limit" and want to search on
+      // it you can search it by prefixing the field name with an escaped char
+      // (e.g. "_sort=foo" or "_limit=bar")
+      if (keyName == "sort" || keyName == "limit")
         return;
       
       // Only allow A-z 0-9 _ and - in key names
@@ -60,7 +61,7 @@ module.exports = function(schemas) {
       // @TODO Always does a case insensitive search should be configurable
       
       var queryOption = { _type: req.params.model };
-      queryOption[escapedKeyName] = { '$regex': req.query[escapedKeyName].trim(), $options: 'i' };
+      queryOption[escapedKeyName] = { '$regex': req.query[keyName].trim(), $options: 'i' };
       queryOptions.push(queryOption);
     });
 
@@ -97,6 +98,16 @@ module.exports = function(schemas) {
       search.sort(sortOptions);
     }
     
+    // @TODO Make default search limit and max hard limit configurable by admin
+    if (req.query.limit) {
+      // Hard limit of max results to 1000
+      var limit = (parseInt(req.query.limit) <= 1000) ? parseInt(req.query.limit) : 1000;
+      search.limit(limit);
+    } else {
+      // Default max result number is 100
+      search.limit(100);
+    }
+
     search.toArray(function(err, results) {
       if (err) return res.status(500).json({ error: "Unable to search entities" });
   
