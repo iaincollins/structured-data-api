@@ -58,11 +58,14 @@ module.exports = function(schemas) {
       if (escapedKeyName == '')
         return;
       
-      // @TODO Always does a case insensitive search should be configurable
-      
-      var queryOption = { _type: req.params.model };
-      queryOption[escapedKeyName] = { '$regex': req.query[keyName].trim(), $options: 'i' };
-      queryOptions.push(queryOption);
+      req.query[keyName].trim().split(" ").forEach(function(word, index) {
+        // Allow max 100 different keywords per search
+        if (index > 100)
+          return;
+        var queryOption = { _type: req.params.model };
+        queryOption[escapedKeyName] = { '$regex': word, $options: 'i' };
+        queryOptions.push(queryOption);
+      });
     });
 
     if (queryOptions.length == 0) {
