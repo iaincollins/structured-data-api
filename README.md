@@ -266,19 +266,23 @@ HTTP DELETE to /:schemaName/:id
 
 ### Searching
 
-You can search against values in the 'name' and 'description' fields and specify one or both options as query paramaters.
+You can search for text in fields (e.g by passing arguments like "?name=foo" or "?description=bar").
 
-You can also use 'q' to search both - in future this option may also support searching across other fields.
+You can also sort by one or more fields in forward or reverse order by passing a 'sort' argument (e.g "?sort=name", "?sort=-name", "?sort=name,description").
 
-HTTP GET to /:schemaName/search
+HTTP GET to /:schemaName
 
-    curl http://example.com/Person/search?q=John+Smith
+    curl http://example.com/Person?name=John+Smith&amp;sort=name
 
 To request entities as JSON-LD:
 
-    curl -H "Accept: application/ld+json" http://example.com/Person/search?name=John+Smith
+    curl -H "Accept: application/ld+json" http://example.com/Person?name=John+Smith&amp;sort=name
 
 ## Advanced usage
+
+### JSON vs JSON-LD
+
+Unless you request "application/ld+json" the API will return JSON (not specifically JSON-LD). Requesting JSON-LD returns a very similar response but will include additional JSON-LD specific fields in the response and does not include automatically generated metadata (like  the internal "@dateCreated" and "@dateModified" fields).
 
 ### Schemas
 
