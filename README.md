@@ -25,13 +25,16 @@ If you have Node.js and MongoDB already installed all you need to do is download
     
 That's it! Go to http://localhost:3000 in your browser to get started.
 
-Note: To generate an API key, use the add-user script:
+To generate an API key, use the add-user script:
 
     bin/add-user.js -e john.smith@example.com
+    API Key: 360U7-5584S-CSQQL-6TM13-KMSZ6-91637	Email: john.smith@example.com
+
+There are also 'list-users' and 'remove-user' scripts in the ./bin/ directory. Pass '--help' as an argument for options.
 
 ### Having trouble?
 
-If you don't have Node.js and MongoDB instaled and are running on a Mac, just install ([Homebrew](http://brew.sh) then run this BEFORE running the commands above:
+If you don't have Node.js and MongoDB instaled and are running on a Mac, just install [Homebrew](http://brew.sh) then run this BEFORE running the commands above:
 
     brew install mongodb node
 
@@ -40,6 +43,8 @@ Alternatively, you can use this button to deploy it remotely to Heroku:
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/glitchdigital/structured-data-api)
 
 This is the easiest way to get started. You'll probably want to configure some options using environment variables if use Heroku. See the section "Deploying to Heroku" for more details.
+
+Note that if you configure your instance via environables (including an admin API key) you will want to restart your Heroku instance to apply changes.
 
 ## About this platform
 
