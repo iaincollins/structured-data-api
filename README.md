@@ -272,11 +272,11 @@ You can also sort by one or more fields in forward or reverse order by passing a
 
 HTTP GET to /:schemaName
 
-    curl http://example.com/Person?name=John+Smith&amp;sort=name
+    curl http://example.com/Person?name=John+Smith&sort=name
 
 To request entities as JSON-LD:
 
-    curl -H "Accept: application/ld+json" http://example.com/Person?name=John+Smith&amp;sort=name
+    curl -H "Accept: application/ld+json" http://example.com/Person?name=John+Smith&sort=name
 
 ## Advanced usage
 
