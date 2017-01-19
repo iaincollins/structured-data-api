@@ -1,18 +1,12 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "title": "Question",
+  "title": "ClaimReview",
   "type": "object",
   "properties": {
     "name": {
       "type": "string"
     },
-    "alternateName": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "text": {
+    "description": {
       "type": "string"
     },
     "url": {
@@ -20,13 +14,8 @@
       "format": "uri"
     },
     "image": {
-      "$ref": "ImageObject.json"
-    },
-    "video": {
-      "$ref": "VideoObject.json"
-    },
-    "audio": {
-      "$ref": "AudioObject.json"
+      "type": "string",
+      "format": "uri"
     },
     "dateCreated": {
       "type": "string",
@@ -35,13 +24,6 @@
     "dateModified": {
       "type": "string",
       "format": "date-time"
-    },
-    "datePublished": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "acceptedAnswer": {
-      "$ref": "Answer.json"
     },
     "mainEntity": {
       "$ref": "Thing.json"
@@ -52,8 +34,18 @@
         "$ref": "Thing.json"
       }
     },
-    "keywords": {
+    "claimReviewed": {
       "type": "string"
+    },
+    "reviewBody": {
+      "type": "string"
+    },
+    "itemReviewed": {
+      "type": "string",
+      "format": "uri"
+    },
+    "reviewRating": {
+      "$ref": "Rating.json"
     },
     "temporalCoverage": {
       "type": "string",
@@ -61,6 +53,9 @@
     },
     "spatialCoverage": {
       "$ref": "Place.json"
+    },
+    "citation": {
+      "type": "string"
     }
   },
   "additionalProperties": false

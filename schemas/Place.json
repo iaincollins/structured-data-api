@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Place",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "address": {
+      "$ref": "#/definitions/PostalAddress"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "image": {
+      "$ref": "ImageObject.json"
+    },
+    "geo": {
+      "type": "object",
+      "anyOf": [
+        {
+          "elevation": { "type": "number"},
+          "latitude": { "type": "number"},
+          "longitude": { "type": "number"} 
+        }, {
+          "box": { "type": "string"},
+          "circle": { "type": "string"},
+          "line": { "type": "string"},
+          "polygon": { "type": "string"}
+        }
+      ]
+    }
+  },
+  "required": ["name"],
+  "definitions": {
+    "PostalAddress": {
+      "type": "object",
+      "properties": {
+        "streetAddress": { "type": "string" },
+        "addressRegion": { "type": "string" },
+        "addressLocality": { "type": "string" },
+        "addressCountry": { "type": "string" },
+        "postalCode": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

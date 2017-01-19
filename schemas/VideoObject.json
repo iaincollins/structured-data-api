@@ -1,26 +1,17 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "title": "Answer",
+  "title": "VideoObject",
   "type": "object",
   "properties": {
     "name": {
       "type": "string"
     },
-    "text": {
+    "description": {
       "type": "string"
     },
     "url": {
       "type": "string",
       "format": "uri"
-    },
-    "image": {
-      "$ref": "ImageObject.json"
-    },
-    "video": {
-      "$ref": "VideoObject.json"
-    },
-    "audio": {
-      "$ref": "AudioObject.json"
     },
     "dateCreated": {
       "type": "string",
@@ -30,18 +21,18 @@
       "type": "string",
       "format": "date-time"
     },
-    "datePublished": {
+    "license": {
       "type": "string",
-      "format": "date-time"
+      "format": "uri"
     },
-    "citation": {
+    "publisher": {
+      "oneOf": [
+        { "$ref": "Person.json" },
+        { "$ref": "Organization.json" }
+      ]
+    },
+    "caption": {
       "type": "string"
-    },
-    "upvoteCount": {
-      "type": "integer"
-    },
-    "downvoteCount": {
-      "type": "integer"
     }
   },
   "additionalProperties": false

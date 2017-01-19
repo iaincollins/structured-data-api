@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Rating",
+  "type": "object",
+  "properties": {
+    "bestRating": {
+      "type": "number"
+    },
+    "worstRating": {
+      "type": "number"
+    },
+    "ratingValue": {
+      "type": "number"
+    },
+    "author": {
+      "oneOf": [
+        { "$ref": "Person.json" },
+        { "$ref": "Organization.json" }
+      ]
+    }
+  },
+  "additionalProperties": false
+}
