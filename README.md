@@ -10,8 +10,6 @@ API end-points, documentation, database storage, validation are all handled auto
 
 It provides a simple system to generate API keys, with public read access and API keys being required to make changes (i.e. Creating, Updating and Deleting) and takes care of serving schemas, validation and exporting data as JSON-LD.
 
-The web front end looks like this: https://api.glitch.digital
-
 You are encouraged to fork and adapt this codebase to your own needs!
 
 ## Quick start
